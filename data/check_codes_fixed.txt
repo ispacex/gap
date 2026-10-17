@@ -1,0 +1,4 @@
+RESULT copies=707 wrong=0 pq failed=0
+RESULT copies=708 wrong=0 pq failed=0
+RESULT copies=708 wrong=0 pq failed=0
+TOTAL copies=2123 wrong=0 pq failed=0
