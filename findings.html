@@ -89,7 +89,7 @@ exponents with respect to $g_1, \dots, g_n$; <code>pq</code> reads them as expon
 $q_1, \dots, q_n$. Where the two bases differ, <code>pq</code> works with maps that are not the automorphisms
 of $G$ (often not automorphisms at all): their action on the $p$-multiplicator, and so the orbits on allowable
 subgroups, is wrong.</p>
-<p><b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-aut-basis"><code>fix-aut-basis</code></a>). Before sending automorphisms of the group itself,
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/96">#96</a>). Before sending automorphisms of the group itself,
 <code>PQ_PG_SUPPLY_AUTS</code> asks <code>pq</code> for its current pcp and the images of $g_1,\dots,g_n$ in it
 (<code>PQ_PCP_BASIS</code>), and <code>PQ_AUT_INPUT</code> sends, for each automorphism $\alpha$, the images
 $\varepsilon(\alpha(\varepsilon^{-1}(q_j)))$ in <code>pq</code>'s coordinates, where $\varepsilon$ is the
@@ -124,7 +124,7 @@ automorphisms under which $k$ closes its orbit (up to $m + 1$ for $m$ automorphi
 indices in a Schreier vector (<code>insoluble_orbits.c</code>) and in <code>word_map</code>
 (<code>standard.c</code>). All of these were <code>char</code>, which is signed on x86 and on macOS arm64, and
 wraps at 127. For the group above AutPGrp gives 130 soluble automorphisms.</p>
-<p><b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-char-orbit-counters"><code>fix-char-orbit-counters</code></a>): these arrays are <code>int</code>.</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/99">#99</a>): these arrays are <code>int</code>.</p>
 <p><b>Why it is right.</b> A change of type only; every value stored fits in an <code>int</code> (at most
 $m + 1$, or an automorphism index). Independently of the code: appending identity automorphisms does not change
 the group they generate, so it must not change the descendants. On master it does, as soon as there are 127
@@ -145,7 +145,7 @@ Sylow 2-subgroup of $S_8$; bijective after.</p>
 <p><b>Cause.</b> <code>pq</code> is given the presentation on <code>datarec.pcgs</code>, and the last $k$
 entries of its map are the images of those elements, but <code>anusp.gi</code> paired them with
 <code>GeneratorsOfGroup(G)</code>, and built the map with <code>GroupHomomorphismByImagesNC</code>.</p>
-<p><b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-sp-epimorphism"><code>fix-sp-epimorphism</code></a>): pair them with <code>datarec.pcgs</code>, as
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/100">#100</a>): pair them with <code>datarec.pcgs</code>, as
 <code>PQ_GROUP_FROM_PCP</code> already does.</p>
 
 <h2 id="descendants-law">4. A group that breaks the exponent law asked for crashes pq</h2>
@@ -154,7 +154,7 @@ entries of its map are the images of those elements, but <code>anusp.gi</code> p
 the law, that quotient is smaller than $G$ (here 3 generators instead of 4), but the automorphisms are still
 sent with $|{\rm pcgs}(G)|$ exponents each, and <code>pq</code> takes the surplus as answers to its next
 questions.</p>
-<p><b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-descendants-law"><code>fix-descendants-law</code></a>). Every descendant of $G$ has $G$ as a quotient, so it breaks the law
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/97">#97</a>). Every descendant of $G$ has $G$ as a quotient, so it breaks the law
 too: the answer is the empty list, returned before <code>pq</code> is called, as for a group that is not
 capable. $G$ satisfies $x^e = 1$ iff $\exp(G) \mid e$, and is metabelian iff its derived length is at most 2.</p>
 
@@ -165,7 +165,7 @@ capable. $G$ satisfies $x^e = 1$ iff $\exp(G) \mid e$, and is metabelian iff its
 group, while <code>pq</code> works with the relators of the option. Here it sends $2 \times 2$ matrices for a
 group of rank 1; <code>pq</code> takes the extra entries as further answers and waits for input, while GAP waits
 for <code>pq</code>.</p>
-<p><b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-sp-relators-rank"><code>fix-sp-relators-rank</code></a>): take the rank from the group the relators define
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/98">#98</a>): take the rank from the group the relators define
 (<code>PqGAPRelators</code>).</p>
 
 <h2 id="stale-descendants">6. An interactive <code>PqDescendants</code> returns groups of earlier commands</h2>
@@ -174,23 +174,23 @@ PqSetPQuotientToGroup(procId); PqComputePCover(procId); PqPGSupplyAutomorphisms(
 PqPGConstructDescendants(procId : StepSize := 1);    # 3 groups of order 27
 List(PqDescendants(procId : StepSize := 2), Size);   # [ 27, 27, 27, 81, 81, 81 ]; fixed: [ 81, 81, 81 ]</code></pre>
 <p><b>Cause.</b> <code>pq</code> appends to <code>GAP_library</code> for the life of the process; the file is
-emptied only by <code>PqStart</code>. <b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-stale-descendants"><code>fix-stale-descendants</code></a>): the groups of this call are
+emptied only by <code>PqStart</code>. <b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/101">#101</a>): the groups of this call are
 the last <code>ndescendants</code> entries; keep those.</p>
 
 <h2 id="savepqlist">7. <code>SavePqList</code> writes files <code>PqList</code> cannot read</h2>
 <p>For a group with an automorphism group, it wrote a 4-argument call of the 6-argument
-<code>ANUPQSetAutomorphismGroup</code>. <b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-savepqlist"><code>fix-savepqlist</code></a>): write the automorphism data
+<code>ANUPQSetAutomorphismGroup</code>. <b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/102">#102</a>): write the automorphism data
 <code>PqDescendants</code> attached, in the call <code>pq</code> itself writes; the groups read back have the same
 data and the same descendants.</p>
 
 <h2 id="relative-orders">8. The option <code>RelativeOrders</code></h2>
 <p><code>PQ_MANUAL_AUT_INPUT</code> looped <code>for i in RelativeOrders</code> and sent
 <code>RelativeOrders[i]</code>: <code>[3, 2]</code> gave an error, <code>[2, 3, 3]</code> sent 3, 3, 3.
-<b>Fix</b> (branch <a href="https://github.com/ispacex/anupq/tree/fix-relative-orders"><code>fix-relative-orders</code></a>): loop over the positions.</p>
+<b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/103">#103</a>): loop over the positions.</p>
 
 <h2 id="isomorphic-trivial">9. <code>IsIsomorphicPGroup</code> on two trivial groups</h2>
 <p>Raised "&lt;G&gt; must be a p-group" (the smallest root of 1 is not a prime). <b>Fix</b>
-(branch <a href="https://github.com/ispacex/anupq/tree/fix-isomorphic-trivial"><code>fix-isomorphic-trivial</code></a>): return <code>true</code>.</p>
+(<a href="https://github.com/gap-packages/anupq/pull/104">#104</a>): return <code>true</code>.</p>
 
 </main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master
 at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>),

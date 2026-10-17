@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <script>(function(d){d.classList.add('js');try{var t=localStorage.getItem('gap-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t)}catch(e){}})(document.documentElement)</script>
 
-<title>ANUPQ: a correctness audit — ANUPQ: a correctness audit</title>
+<title>ANUPQ: a correctness audit</title>
 <meta name="description" content="What we checked in ANUPQ, what we found, and the fixes we propose.">
 <style>
 :root { --ink:#1f2933; --muted:#52606d; --line:#d9dee5; --bg:#ffffff; --soft:#f4f6f9;
@@ -89,23 +89,23 @@ other than <code>pq</code>'s own, or 127 or more automorphisms.</div>
 <div class="tw"><table>
 <tr><th class=l>Defect</th><th class=l>Effect</th><th class=l>Reached by</th><th>Fix</th></tr>
 <tr><td class=l><a href="findings.html#aut-basis">Automorphisms sent in the wrong basis</a></td><td class="l bad">wrong descendants; pq crash</td>
-<td class=l><code>PqDescendants(G)</code> for a pc group whose pcgs is not pq's own pcp: 121 of 2123 isomorphic copies of SmallGroups of order 64–256 gave wrong descendants, 1 crashed pq</td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-aut-basis"><code>fix-aut-basis</code></a></td></tr>
+<td class=l><code>PqDescendants(G)</code> for a pc group whose pcgs is not pq's own pcp: 121 of 2123 isomorphic copies of SmallGroups of order 64–256 gave wrong descendants, 1 crashed pq</td><td><a href="https://github.com/gap-packages/anupq/pull/96">#96</a></td></tr>
 <tr><td class=l><a href="findings.html#char-counters">Orbit counters in <code>char</code></a></td><td class="l bad">wrong descendants and stabilisers</td>
-<td class=l>127 or more automorphisms, e.g. <code>AbelianGroup([2^3,2^5,2^7,2^9,2^11])</code>: 16384 step-1 descendants instead of 26</td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-char-orbit-counters"><code>fix-char-orbit-counters</code></a></td></tr>
+<td class=l>127 or more automorphisms, e.g. <code>AbelianGroup([2^3,2^5,2^7,2^9,2^11])</code>: 16384 step-1 descendants instead of 26</td><td><a href="https://github.com/gap-packages/anupq/pull/99">#99</a></td></tr>
 <tr><td class=l><a href="findings.html#sp-epimorphism"><code>EpimorphismStandardPresentation</code></a></td><td class="l bad">map not bijective</td>
-<td class=l>pc groups whose generators are not their pcgs, e.g. <code>AbelianGroup(IsPcGroup,[4,2])</code>; the SP itself is right</td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-sp-epimorphism"><code>fix-sp-epimorphism</code></a></td></tr>
+<td class=l>pc groups whose generators are not their pcgs, e.g. <code>AbelianGroup(IsPcGroup,[4,2])</code>; the SP itself is right</td><td><a href="https://github.com/gap-packages/anupq/pull/100">#100</a></td></tr>
 <tr><td class=l><a href="findings.html#descendants-law">Exponent law the group breaks</a></td><td class="l bad">pq crash</td>
-<td class=l><code>PqDescendants(SmallGroup(16,5) : Exponent := 4)</code></td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-descendants-law"><code>fix-descendants-law</code></a></td></tr>
+<td class=l><code>PqDescendants(SmallGroup(16,5) : Exponent := 4)</code></td><td><a href="https://github.com/gap-packages/anupq/pull/97">#97</a></td></tr>
 <tr><td class=l><a href="findings.html#sp-relators">SP rank with <code>Relators</code></a></td><td class="l amb">hang</td>
-<td class=l><code>PqStandardPresentation(F : Prime := 2, Relators := ["a^8", "b*a^-2"])</code></td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-sp-relators-rank"><code>fix-sp-relators-rank</code></a></td></tr>
+<td class=l><code>PqStandardPresentation(F : Prime := 2, Relators := ["a^8", "b*a^-2"])</code></td><td><a href="https://github.com/gap-packages/anupq/pull/98">#98</a></td></tr>
 <tr><td class=l><a href="findings.html#stale-descendants">Stale groups in interactive <code>PqDescendants</code></a></td><td class="l bad">extra groups returned</td>
-<td class=l>an interactive process after <code>PqPGConstructDescendants</code></td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-stale-descendants"><code>fix-stale-descendants</code></a></td></tr>
+<td class=l>an interactive process after <code>PqPGConstructDescendants</code></td><td><a href="https://github.com/gap-packages/anupq/pull/101">#101</a></td></tr>
 <tr><td class=l><a href="findings.html#savepqlist"><code>SavePqList</code></a></td><td class="l amb">file unreadable</td>
-<td class=l>a group with an automorphism group</td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-savepqlist"><code>fix-savepqlist</code></a></td></tr>
+<td class=l>a group with an automorphism group</td><td><a href="https://github.com/gap-packages/anupq/pull/102">#102</a></td></tr>
 <tr><td class=l><a href="findings.html#relative-orders"><code>RelativeOrders</code> option</a></td><td class="l amb">wrong data or error</td>
-<td class=l><code>PqPGSupplyAutomorphisms(.. : RelativeOrders := [3, 2])</code></td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-relative-orders"><code>fix-relative-orders</code></a></td></tr>
+<td class=l><code>PqPGSupplyAutomorphisms(.. : RelativeOrders := [3, 2])</code></td><td><a href="https://github.com/gap-packages/anupq/pull/103">#103</a></td></tr>
 <tr><td class=l><a href="findings.html#isomorphic-trivial">Trivial groups in <code>IsIsomorphicPGroup</code></a></td><td class="l amb">error</td>
-<td class=l>two trivial groups</td><td>branch <a href="https://github.com/ispacex/anupq/tree/fix-isomorphic-trivial"><code>fix-isomorphic-trivial</code></a></td></tr>
+<td class=l>two trivial groups</td><td><a href="https://github.com/gap-packages/anupq/pull/104">#104</a></td></tr>
 </table></div>
 <p class=muted>Red: a wrong mathematical result or a crash. Amber: an error, a hang or unusable output; no wrong
 result is returned. Further suspected defects that we did not fix, or could not confirm, are on
