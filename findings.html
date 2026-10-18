@@ -4,6 +4,10 @@
 
 <title>Findings and fixes — ANUPQ: a correctness audit</title>
 <meta name="description" content="Each defect: reproducer, cause, fix, why it is right, evidence.">
+<link rel="alternate" hreflang="en" href="https://ispacex.github.io/gap/findings.html">
+<link rel="alternate" hreflang="ru" href="https://ispacex.github.io/gap/ru/findings.html">
+<link rel="alternate" hreflang="x-default" href="https://ispacex.github.io/gap/findings.html">
+<link rel="canonical" href="https://ispacex.github.io/gap/findings.html">
 <style>
 :root { --ink:#1f2933; --muted:#52606d; --line:#d9dee5; --bg:#ffffff; --soft:#f4f6f9;
         --bad:#fde8e4; --badink:#a33a1f; --ok:#e7f4ea; --amb:#fff3d6; --acc:#2e6db4; --sel:rgba(46,109,180,.12);
@@ -44,7 +48,11 @@ nav a:hover, nav a:focus-visible { border-color:var(--acc); }
 nav a.cur { background:var(--acc); border-color:var(--acc); color:var(--bg); font-weight:600; }
 @media (max-width:520px) { nav { gap:.3rem; } nav a { font-size:.85rem; padding:.1em .5em; } }
 .wrap { max-width:1100px; margin:0 auto; padding:.9rem 16px; }
-h1 { font-size:1.6rem; margin:.6rem 0 .8rem; } h2 { font-size:1.25rem; margin-top:2rem; }
+h1 { font-size:1.6rem; margin:.6rem 0 .8rem; } h2 { font-size:1.25rem; margin-top:2rem; } h3 { font-size:1.07rem; margin-top:1.7rem; }
+pre { overflow-x:auto; background:var(--soft); padding:.6rem .8rem; border-radius:6px; }
+pre code { padding:0; }
+main p, main li, td { overflow-wrap:break-word; }
+.added { margin:-.5rem 0 .5rem; font-size:.82rem; } .added a { color:var(--muted); }
 a { color:var(--acc); } .muted { color:var(--muted); } small { color:var(--muted); }
 .tw { overflow-x:auto; margin:1rem 0; border:1px solid var(--line); border-radius:6px;
       position:relative; }  /* KaTeX's absolutely placed pieces are clipped too, not left sticking out of the page */
@@ -65,15 +73,25 @@ footer { border-top:1px solid var(--line); margin-top:3rem; }
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script></head>
 <body><header><div class="wrap"><div class="top"><a class="title" href="index.html">ANUPQ: a correctness audit</a>
-<div class="tools"><span class="theme" role="group" aria-label="Theme"><button type="button" data-t="system" aria-pressed="true" aria-label="Theme: system" title="Theme: system"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button><button type="button" data-t="light" aria-pressed="false" aria-label="Theme: light" title="Theme: light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-t="dark" aria-pressed="false" aria-label="Theme: dark" title="Theme: dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></span><span class="lang" role="group" aria-label="Language"><strong lang="en" aria-current="true">EN</strong><a href="ru/index.html" hreflang="ru" lang="ru">RU</a></span></div>
-</div>
-<nav aria-label="Sections"><a href="index.html">Summary</a><a href="findings.html" class=cur aria-current=page>Findings and fixes</a><a href="checks.html">Differential checks</a><a href="open.html">Open items</a><a href="data.html">Data and scripts</a></nav></div></header>
+<div class="tools"><span class="theme" role="group" aria-label="Theme"><button type="button" data-t="system" aria-pressed="true" aria-label="Theme: system" title="Theme: system"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button><button type="button" data-t="light" aria-pressed="false" aria-label="Theme: light" title="Theme: light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-t="dark" aria-pressed="false" aria-label="Theme: dark" title="Theme: dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></span><span class="lang" role="group" aria-label="Language"><strong lang="en" aria-current="true">EN</strong><a href="ru/findings.html" hreflang="ru" lang="ru">RU</a></span></div></div>
+<nav aria-label="Sections"><a href="index.html">Summary</a><a href="findings.html" class=cur aria-current=page>Findings and fixes</a><a href="checks.html">Differential checks</a><a href="open.html">Open items</a><a href="history.html">History</a><a href="data.html">Data and scripts</a></nav></div></header>
 <main class="wrap">
 <h1>Findings and fixes</h1>
 <p>Each section: the problem, a reproducer, the cause, the fix, why the fix is right, and the evidence. Code
-references are to master 81bcf35.</p>
+references are to master 81bcf35. For the defects of the second pass we also say plainly whether the defect
+can give a wrong result without any message, and whether 2-group generation with default options
+(<code>PqDescendants</code>, <code>PqPCover</code>, <code>PqStandardPresentation</code> of a 2-group, no
+further options) can reach it.</p>
+<ul>
+<li><a href="#first-pass">First pass</a>: findings 1–9, pull requests #96–#104</li>
+<li><a href="#silent">Second pass, wrong results without a message</a>: findings 10–19</li>
+<li><a href="#crashes">Second pass, crashes and errors</a>: findings 20–22</li>
+<li><a href="#data">Second pass, wrong data</a>: findings 23–24</li>
+</ul>
 
-<h2 id="aut-basis">1. Automorphisms are sent to pq in the wrong basis</h2>
+<h2 id="first-pass">First pass</h2>
+<h3 id="aut-basis">1. Automorphisms are sent to pq in the wrong basis</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · data: <a href="data.html#d-coords"><code>coords.g</code></a>, <a href="data.html#d-codes"><code>gen_codes.g</code></a>, <a href="data.html#d-check-codes"><code>check_codes.g</code></a>, <a href="data.html#d-ds-children"><code>ds_children.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/96/files"><code>tst/aut_basis.tst</code></a></p>
 <p><b>Problem.</b> <code>PqDescendants(G)</code> for a pc group $G$ returns wrong descendants, or crashes
 <code>pq</code>, when the pcgs of $G$ is not the pc presentation <code>pq</code> computes for $G$. Groups from
 the SmallGroups library are not affected (their pcgs is <code>pq</code>'s); copies of them are.</p>
@@ -108,11 +126,12 @@ copies, list on <a href="data.html">Data</a>), compared with the SmallGroups gro
 <tr><td class=l>with the fix</td><td>2123</td><td class=ok>0</td><td class=ok>0</td></tr></table></div>
 <p>The wrong answers start at order 64 (<code>SmallGroup(64, 128)</code>: 6 descendants instead of 12). Also: the copies
 of all groups of $p$-class $\ge 3$ of orders 32–128 by three other routes (special pcgs, permutation group,
-<code>pq</code>'s own presentation of the fp group): 1983 (in each of four runs) comparisons, 0 differences with the fix,
+<code>pq</code>'s own presentation of the fp group): 1983 comparisons in each of four runs, 0 differences with the fix,
 also under AddressSanitizer. The extra round trip costs nothing measurable (SmallGroups of order 128, every 10th:
 28.6 s before, 29.3 s after).</p>
 
-<h2 id="char-counters">2. Orbit counters in <code>char</code></h2>
+<h3 id="char-counters">2. Orbit counters in <code>char</code></h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/99/files"><code>tst/orbit_counters.tst</code></a></p>
 <p><b>Problem.</b> With 127 or more automorphisms, the soluble orbit algorithm returns wrong orbits and
 stabilisers, so wrong descendants (and wrong automorphism groups for them).</p>
 <pre><code>Length(PqDescendants(AbelianGroup([2^3, 2^5, 2^7, 2^9, 2^11]) : StepSize := 1));
@@ -134,7 +153,8 @@ The time for the group above drops from 44 s to 3 s, since the orbits are no lon
 $\log_2 |\mathrm{Aut}(G)| < d \cdot n$ of them for $|G| = 2^n$ of rank $d$. For $|G| \le 2^{10}$ that is below
 100, plus a few insoluble ones: below 127. So step-1 calls on groups of order at most $2^{10}$ are not affected.</p>
 
-<h2 id="sp-epimorphism">3. <code>EpimorphismStandardPresentation</code> is not an isomorphism for pc groups</h2>
+<h3 id="sp-epimorphism">3. <code>EpimorphismStandardPresentation</code> is not an isomorphism for pc groups</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/100/files"><code>tst/sp_epimorphism.tst</code></a></p>
 <p><b>Problem.</b> For a pc $p$-group whose generators are not its pcgs, the map returned is not bijective.
 The standard presentation itself is right.</p>
 <pre><code>G := AbelianGroup(IsPcGroup, [4, 2]);; e := EpimorphismStandardPresentation(G);;
@@ -148,7 +168,8 @@ entries of its map are the images of those elements, but <code>anusp.gi</code> p
 <p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/100">#100</a>): pair them with <code>datarec.pcgs</code>, as
 <code>PQ_GROUP_FROM_PCP</code> already does.</p>
 
-<h2 id="descendants-law">4. A group that breaks the exponent law asked for crashes pq</h2>
+<h3 id="descendants-law">4. A group that breaks the exponent law asked for crashes pq</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/97/files"><code>tst/descendants_law.tst</code></a></p>
 <pre><code>PqDescendants(SmallGroup(16, 5) : Exponent := 4);   # C8 x C2: pq dies; with the fix: [ ]</code></pre>
 <p><b>Cause.</b> <code>pq</code> first computes the $p$-quotient of $G$ of its class under the law; if $G$ breaks
 the law, that quotient is smaller than $G$ (here 3 generators instead of 4), but the automorphisms are still
@@ -158,7 +179,8 @@ questions.</p>
 too: the answer is the empty list, returned before <code>pq</code> is called, as for a group that is not
 capable. $G$ satisfies $x^e = 1$ iff $\exp(G) \mid e$, and is metabelian iff its derived length is at most 2.</p>
 
-<h2 id="sp-relators">5. <code>PqStandardPresentation</code> hangs with <code>Relators</code> of another rank</h2>
+<h3 id="sp-relators">5. <code>PqStandardPresentation</code> hangs with <code>Relators</code> of another rank</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/98/files"><code>tst/sp_relators.tst</code></a></p>
 <pre><code>PqStandardPresentation(FreeGroup("a", "b") : Prime := 2, Relators := ["a^8", "b*a^-2"]);
 # hangs; with the fix: the standard presentation of C8</code></pre>
 <p><b>Cause.</b> The rank of the class-1 quotient, for the automorphisms $GL(\mathrm{rank}, p)$, is taken from the
@@ -168,7 +190,8 @@ for <code>pq</code>.</p>
 <p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/98">#98</a>): take the rank from the group the relators define
 (<code>PqGAPRelators</code>).</p>
 
-<h2 id="stale-descendants">6. An interactive <code>PqDescendants</code> returns groups of earlier commands</h2>
+<h3 id="stale-descendants">6. An interactive <code>PqDescendants</code> returns groups of earlier commands</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/101/files"><code>tst/stale_descendants.tst</code></a></p>
 <pre><code>procId := PqStart(FreeGroup(2) : Prime := 3);; Pq(procId : ClassBound := 1);;
 PqSetPQuotientToGroup(procId); PqComputePCover(procId); PqPGSupplyAutomorphisms(procId);
 PqPGConstructDescendants(procId : StepSize := 1);    # 3 groups of order 27
@@ -177,24 +200,345 @@ List(PqDescendants(procId : StepSize := 2), Size);   # [ 27, 27, 27, 81, 81, 81 
 emptied only by <code>PqStart</code>. <b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/101">#101</a>): the groups of this call are
 the last <code>ndescendants</code> entries; keep those.</p>
 
-<h2 id="savepqlist">7. <code>SavePqList</code> writes files <code>PqList</code> cannot read</h2>
+<h3 id="savepqlist">7. <code>SavePqList</code> writes files <code>PqList</code> cannot read</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/102/files"><code>tst/savepqlist.tst</code></a></p>
 <p>For a group with an automorphism group, it wrote a 4-argument call of the 6-argument
 <code>ANUPQSetAutomorphismGroup</code>. <b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/102">#102</a>): write the automorphism data
 <code>PqDescendants</code> attached, in the call <code>pq</code> itself writes; the groups read back have the same
 data and the same descendants.</p>
 
-<h2 id="relative-orders">8. The option <code>RelativeOrders</code></h2>
+<h3 id="relative-orders">8. The option <code>RelativeOrders</code></h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/103/files"><code>tst/relative_orders.tst</code></a></p>
 <p><code>PQ_MANUAL_AUT_INPUT</code> looped <code>for i in RelativeOrders</code> and sent
 <code>RelativeOrders[i]</code>: <code>[3, 2]</code> gave an error, <code>[2, 3, 3]</code> sent 3, 3, 3.
 <b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/103">#103</a>): loop over the positions.</p>
 
-<h2 id="isomorphic-trivial">9. <code>IsIsomorphicPGroup</code> on two trivial groups</h2>
-<p>Raised "&lt;G&gt; must be a p-group" (the smallest root of 1 is not a prime). <b>Fix</b>
+<h3 id="isomorphic-trivial">9. <code>IsIsomorphicPGroup</code> on two trivial groups</h3>
+<p class="added"><a href="history.html#e-published">added 17.10.2026</a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/104/files"><code>tst/isomorphic_trivial.tst</code></a></p>
+<p>Raised <code>&lt;G&gt; must be a p-group</code> (the smallest root of 1 is not a prime). <b>Fix</b>
 (<a href="https://github.com/gap-packages/anupq/pull/104">#104</a>): return <code>true</code>.</p>
 
-</main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master
-at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>),
-which relies on ANUPQ for p-group generation. As of 18 October 2026.</small></div></footer>
+<h2 id="silent">Second pass: wrong results without a message</h2>
+<p>All ten need something that 2-group generation with default options does not do; the last line of each
+section says what.</p>
+
+<h3 id="pcgs-automorphisms">10. <code>PcgsAutomorphisms</code> with a sequence that is not PAG</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-161">added 18.10.2026</a> · data: <a href="data.html#d-pcgs-automorphisms"><code>pcgs_automorphisms.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/110/files"><code>tst/pcgs_automorphisms.tst</code></a></p>
+<p><b>Problem.</b> With the option <code>PcgsAutomorphisms</code>, <code>pq</code> takes the automorphisms it is
+given for a PAG generating sequence (each generated subgroup normal of prime index in the next), and nothing
+checks that they are. If they are not, the soluble orbit algorithm returns wrong orbits and stabilisers.</p>
+<pre><code>G := ElementaryAbelianGroup(4);;
+Length(PqDescendants(G : ClassBound := 3));                      # 136
+Length(PqDescendants(G : ClassBound := 3, PcgsAutomorphisms));   # 161: 25 isomorphic duplicates; fixed: 136</code></pre>
+<p>For <code>ElementaryAbelianGroup(8)</code>, whose automorphism group $GL(3,2)$ is not soluble, <code>pq</code>
+reports 116 descendants of order $2^5$ (there are 15 of rank 3 and 2-class 2) and then dies; the manual promises
+an error message.</p>
+<p><b>Cause.</b> <code>trace_action</code> (<code>src/soluble_orbits.c:96–131</code>) follows only the image of the
+last element of an orbit, which is right only if $\langle g_1, \dots, g_{i-1} \rangle$ is normal of prime index in
+$\langle g_1, \dots, g_i \rangle$. <code>PQ_AUT_INPUT</code> sends the <code>agAutos</code> and then the
+<code>glAutos</code> of AutPGrp; the <code>glAutos</code> only generate the quotient and are not a pcgs (for
+$C_2^2$: two involutions generating $S_3$). The manual says the default is <code>IsSolvable(Aut(G))</code>; in the
+code it is <code>false</code>. Commit 71e4ac2 (#92) fixed the out-of-bounds read on this path, not the orbits.</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/110">#110</a>). If <code>PcgsAutomorphisms</code> is set when the automorphisms are
+sent and the image of the <code>glAutos</code> in $GL(d,p)$ is soluble, they are replaced by preimages of a pcgs of
+that image, with their relative orders; otherwise the call stops with an error, as do matrices given by hand that
+fail the PAG test on the Frattini quotient. The manual now gives the real default. A pcgs of a soluble group is a
+PAG sequence and generates the same group, so the orbits are those of the same group.</p>
+<p><b>Without a message?</b> Yes. <b>Default 2-group generation:</b> not affected; the default is
+<code>false</code>, and our runs never set the option. All non-cyclic 2-groups of order at most 32 with soluble
+automorphism group gave the same step-1 descendants with and without it; the error shows from the second step on
+(<code>ClassBound</code> at least class + 2) and with automorphisms given by hand.</p>
+
+<h3 id="exponent-reduced-list">11. An exponent law with automorphisms supplied by hand</h3>
+<p class="added"><a href="history.html#e-extra-MATH-163">added 18.10.2026</a> · data: <a href="data.html#d-exponent-reduced-list"><code>exponent_reduced_list.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/112/files"><code>tst/exponent_reduced_list.tst</code></a></p>
+<p><b>Problem.</b> After <code>PqSupplyAutomorphisms</code>, <code>PqNextClass</code> imposes an exponent law by
+testing a reduced list of words and closing what it finds under the automorphisms. That is right only if the
+automorphisms induce all of $GL(d,p)$ on a relatively free group, as a comment in
+<code>src/extra_relations.c:39–42</code> says; the manual does not. Otherwise part of the law is not imposed, and
+the group is too large.</p>
+<pre><code>id := PqStart(FreeGroup(4) : Prime := 2, Exponent := 2);;
+PqPcPresentation(id : ClassBound := 1);;
+PqSupplyAutomorphisms(id, [ IdentityMat(4) ]);;
+PqNextClass(id);   # order 2^13; the group of exponent 2 has order 2^4, as without automorphisms</code></pre>
+<p>Genuine automorphisms that do not induce $GL(d,p)$ give the same: $\langle a, b \mid a^2 \rangle$ with exponent
+4 and $b \mapsto ab$ gives $2^{13}$ instead of $2^6$; $p = 3$, exponent 3, $d = 2$ and $\mathrm{diag}(2,1)$ give
+$3^8$ instead of $3^3$.</p>
+<p><b>Cause.</b> With automorphisms present, <code>next_class.c:81–86</code> uses <code>REDUCED_LIST</code>: test
+words of weight at most $2c/3$, and of the generators of weight 1 only the first
+(<code>extra_relations.c:216, 239–241</code>).</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/112">#112</a>, to be merged after <a href="https://github.com/gap-packages/anupq/pull/106">#106</a>). The reduced list is
+kept only when there are no relations, no metabelian law, and the matrices generate $GL(d,p)$ (checked by
+enumeration while $|GL(d,p)| \le 2^{24}$); otherwise all words of all weights are tested, and the result closed
+under the automorphisms as before. Closing under genuine automorphisms only adds consequences of the law, so the
+result is the group of the law. 19 cases with automorphisms now give the order computed without them; the
+example B4-4-a-i still gives $2^{422}$ in the same time.</p>
+<p><b>Without a message?</b> Yes; the order is always too large. <b>Default 2-group generation:</b> not affected;
+<code>PqDescendants</code>, <code>PqPCover</code> and <code>PqStandardPresentation</code> test all words and do not
+use these automorphisms.</p>
+
+<h3 id="exponent-queue">12. The exponent-law queue is not enlarged at class 2</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-152">added 18.10.2026</a> · data: <a href="data.html#d-exponent-queue"><code>exponent_queue.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/106/files"><code>tst/exponent_queue.tst</code></a></p>
+<p><b>Problem.</b> <code>next_class</code> allocates the queue of redundancies found by the exponent law before the
+tails, with room for 4 entries, and enlarges it only for classes other than 2
+(<code>src/next_class.c:37, 44–50</code>). At class 2, <code>extra_relations</code> and
+<code>close_relations</code> write past its end. Through GAP the outcome depends on the heap: right, wrong, or a
+crash.</p>
+<pre><code>procId := PqStart(FreeGroup(7) : Prime := 2, Exponent := 2);;
+PqPcPresentation(procId : ClassBound := 1);;
+PqSupplyAutomorphisms(procId, auts);;   # auts: a 7-cycle and a transvection, generating GL(7,2)
+PqNextClass(procId);                    # right: 2^7, class 1</code></pre>
+<p>On master, 10 runs for each $d$: $d = 7$ gave $2^{11}$ six times and crashed once; $d = 8$, 9, 10 gave a wrong
+order ($2^{26}$, $2^{34}$, $2^{43}$) 6, 7 and 7 times. Under ASan: <code>heap-buffer-overflow</code> in
+<code>close_relations.c:128</code> every time.</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/106">#106</a>): enlarge the queue at every class, class 2 included. The new test failed
+in 14 of 15 runs on master and passes with the fix; ASan reports nothing.</p>
+<p><b>Without a message?</b> Sometimes; otherwise <code>pq</code> crashes. <b>Default 2-group generation:</b> not
+affected; the branch needs automorphisms of the $p$-quotient, which only <code>PqSupplyAutomorphisms</code> and
+<code>PqExtendAutomorphisms</code> set.</p>
+
+<h3 id="gl-order">13. <code>glOrder</code> is wrong when $p^d &gt; 10000$</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-156">added 18.10.2026</a> · data: <a href="data.html#d-gl-order"><code>gl_order.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/117/files"><code>tst/gl_order.tst</code></a></p>
+<p><b>Problem.</b> <code>PqStabiliserOfAllowableSubgroup</code> gives AutPGrp the order of the automorphism group
+$A$ modulo its soluble part $S$. For $p^d &gt; 10000$ ($d$ the rank), <code>lib/anustab.gi:121–123</code> takes it
+as <code>ANUPQsize / p^ANUPQagsize</code>, as if every soluble relative order were $p$, and sets no
+<code>glOper</code>. The relative orders are not all $p$ (for $p = 101$: 5, 5, 2, 2), so <code>glOrder</code> is
+wrong and often not an integer. AutPGrp stops enumerating an orbit at <code>glOrder</code>$/q$ and takes
+<code>glOrder</code> for its length, so the stabiliser comes out too small, the descendants get too small
+automorphism groups, and isomorphic duplicates follow at the next step.</p>
+<pre><code>SetInfoLevel(InfoANUPQ, 2);
+PqDescendants(ElementaryAbelianGroup(101^2) : OrderBound := 4, ClassBound := 2);
+# #I  Order of GL subgroup is 1020000/1030301      right: |GL(2,101)|/100 = 1030200</code></pre>
+<p><b>Evidence.</b> The 6 descendants of order $101^4$ are right (<code>pq</code> computes those orbits itself);
+the run to class 3 did not finish. On the same code with the threshold lowered to 0, so that $p = 5$ takes this
+branch, $C_5^2$ to order $5^4$ gives 18 groups of order 625 instead of 9 (isomorphic duplicates), and $C_3^2$ to
+$3^6$ gives 139 groups instead of 132; with the fix 9 and 132, as in SmallGroups.</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/117">#117</a>): <code>glOrder</code> is $|P|/|S|$ for the matrix groups of all and of the
+soluble automorphisms on the Frattini quotient, the index the other branch computes since PR #85.</p>
+<p><b>Without a message?</b> Yes. <b>Default 2-group generation:</b> not affected; for $p = 2$ the branch needs rank
+at least 14, our groups have rank at most 11.</p>
+
+<h3 id="epimorphism-non-pgroup">14. <code>PqEpimorphism</code> for a pc group that is not a $p$-group</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-158">added 18.10.2026</a> · data: <a href="data.html#d-epimorphism-non-pgroup"><code>epimorphism_non_pgroup.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/111/files"><code>tst/epimorphism_non_pgroup.tst</code></a></p>
+<p><b>Problem.</b> For a pc group $G$ that is not a $p$-group, <code>PqEpimorphism</code>,
+<code>EpimorphismPqStandardPresentation</code> and <code>EpimorphismStandardPresentation</code> pair the images of
+<code>pq</code>'s generators with <code>GeneratorsOfGroup(G)</code>, while <code>pq</code> was given a presentation
+on <code>Pcgs(G)</code>. If the two differ, the map is not a homomorphism, or not surjective, or the call fails.</p>
+<pre><code>P := Image(IsomorphismPcGroup(DirectProduct(SymmetricGroup(3), CyclicGroup(4))));;
+B := Group(Reversed(GeneratorsOfGroup(P)));;     # the same group, generators reversed
+PqEpimorphism(B : Prime := 2, ClassBound := 3);   # [f4,f3,f2,f1] -> [f1,f3,f2,1]: not a homomorphism
+C := Group(P.1*P.3, P.2*P.4);;                   # a subgroup of order 12
+PqEpimorphism(C : Prime := 2, ClassBound := 3);   # Error, &lt;gens&gt; and &lt;imgs&gt; must be lists of same length</code></pre>
+<p><b>Cause.</b> <code>lib/anupqi.gi:270–273</code> gives <code>pq</code> <code>FpGroupPcGroup(G)</code>, whose
+generators correspond to <code>Pcgs(G)</code>, and sets no <code>datarec.pcgs</code>; <code>PQ_GROUP_FROM_PCP</code>
+and <code>anusp.gi:222</code> then fall back to <code>GeneratorsOfGroup</code>. Finding 3 fixed the branch of
+$p$-groups only.</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/111">#111</a>, to be merged after <a href="https://github.com/gap-packages/anupq/pull/100">#100</a>): keep the preimages
+of the fp generators and pair the images with them. The earlier note that a check on a subgroup of
+$S_4 \times C_3$ did not finish was not a hang: the standard presentation is returned as an fp group that lists
+only the non-trivial pc relations, which is infinite as an fp group, so <code>Size</code> runs for ever.</p>
+<p><b>Without a message?</b> Yes, in the first case. <b>Default 2-group generation:</b> not affected; $p$-groups and
+fp groups take other branches.</p>
+
+<h3 id="interface-bookkeeping">15. Step size above the nuclear rank, and two more bookkeeping errors</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-160">added 18.10.2026</a> · data: <a href="data.html#d-interface-bookkeeping"><code>step_size.g</code></a></p>
+<p><b>Problem.</b> Three errors in the bookkeeping of the GAP interface; the first can give wrong descendants.</p>
+<p>(a) <b>Step size above the nuclear rank.</b> Under GAP, <code>pq</code> asks again for the step size when it
+exceeds the nuclear rank (<code>src/defaults_pga.c:283</code>), but GAP has already sent its next answers, which
+are then read as step sizes until one is accepted. GAP's own guard (<code>lib/anupqi.gi:2859</code>) works only if
+the nuclear rank is already known.</p>
+<pre><code>G := SmallGroup(4, 2);;                                   # nuclear rank 3
+PqDescendants(G : StepSize := 4, PcgsAutomorphisms);     # 3 groups of order 8; right: [ ]
+PqDescendants(G : StepSize := 4);                        # [ ]: right, but only by chance</code></pre>
+<p>(b) <code>ANUPQDirectoryTemporary</code> changes the temporary directory but not
+<code>ANUPQData.SPimages</code>, so the next <code>PqStandardPresentation</code> reads an empty file and fails
+(<code>lib/anupq.gi:37</code>). (c) A group name containing <code>_</code> (option <code>GroupName</code>, or
+<code>Name(G)</code>) makes <code>PqDescendants</code> fail: the class is read from the file name
+<code>my_G_class2</code> by splitting at <code>_</code> (<code>lib/anupqi.gi:2975</code>); with a space, the
+interactive <code>PqPGSetDescendantToPcp</code> kills <code>pq</code>.</p>
+<p><b>Fix</b> (fix prepared, pull request to come): under GAP <code>pq</code> accepts the step size and returns no
+descendants, as it does with input from a file; <code>ANUPQDirectoryTemporary</code> updates
+<code>SPimages</code>; the class is read from the digits at the end of the file name, and white space in
+<code>GroupName</code> becomes <code>_</code>. With it the three reproducers give <code>[ ]</code>, the group, and
+6 descendants.</p>
+<p><b>Without a message?</b> (a) yes, with <code>PcgsAutomorphisms</code> (or
+<code>RankInitialSegmentSubgroups</code>); (b) and (c) always end in an error. <b>Default 2-group
+generation:</b> not affected; with default options (a) returns the right empty list. Our
+<a href="checks.html#smallgroups">SmallGroups check</a> ran all step sizes in range, some above the nuclear rank,
+without <code>PcgsAutomorphisms</code>; its result stands.</p>
+
+<h3 id="prime-bound">16. Primes $p \ge 2^{15}$</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-150">added 18.10.2026</a> · data: <a href="data.html#d-prime-bound"><code>prime_bound.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/116/files"><code>tst/prime_bound.tst</code></a></p>
+<p><b>Problem.</b> Exponents are packed into 15 bits of an <code>int</code>
+(<code>include/storage_fixed.h</code>), and nothing bounds $p$, so for $p \ge 2^{15}$ an exponent up to $p - 1$
+runs into the sign bit.</p>
+<pre><code>F := FreeGroup("a", "b", "c");; a := F.1;; b := F.2;; c := F.3;;
+G := F / [a^2*b^3*c^5, Comm(a,b)^7*Comm(b,c)^11*c^2];;
+PqEpimorphism(G : Prime := 32771, ClassBound := 1);
+# a, b, c -&gt; [1], [31914], [7068]; right: [1], [10923], [0]. The second relation fails in the image.</code></pre>
+<p>With $p = 65537$ GAP fails on an empty image, and <code>PqPCover(ElementaryAbelianGroup(32771^2))</code> returned
+a group of the wrong order. The standalone <code>pq</code> checks only that $p$ is odd: $p = 9$ with the relation
+$a^3$ loops in <code>invert_modp</code> (a division by zero; endless on arm64).</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/116">#116</a>): $p \le 32749$, the largest prime below $2^{15}$, checked by GAP for the
+option <code>Prime</code> and for a prime taken from a $p$-group, and by <code>pq</code> together with a
+primality test. Not reproduced, and not in the fix: an overflow of the unreduced sum in
+<code>src/update.c:126</code> for $p$ around $10^3$; 137 random presentations with a 64-bit probe reached at most
+$1.06 \cdot 10^9 &lt; 2^{31}$.</p>
+<p><b>Without a message?</b> Yes. <b>Default 2-group generation:</b> not affected; $p = 2$.</p>
+
+<h3 id="pc-generator-limit">17. More than 65535 pc generators in one class</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-149">added 18.10.2026</a> · data: <a href="data.html#d-pc-generator-limit"><code>pc_generator_limit.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/114/files"><code>tst/pc_generator_limit.tst</code></a></p>
+<p><b>Problem.</b> Generator numbers are packed into 16 bits (<code>MAXPC</code> = 65535), and the limit is checked
+only before a class, in the basic menu (<code>src/options.c:101</code>). Within a class,
+<code>create_tail</code>, <code>extend_tail</code> and <code>update_generators</code> number new generators
+without a check, and a number above 65535 aliases: generator $65536 + k$ is stored as generator $k$ squared.</p>
+<pre><code>procId := PqStart(FreeGroup(361) : Prime := 2);;
+PqPcPresentation(procId : ClassBound := 1);;
+PqNextClass(procId);
+PqFactoredOrder(procId);   # [ 2, 65702 ], from a corrupted presentation; fixed: an error</code></pre>
+<p>Rank 360 ($2^{65340}$) is computed correctly; rank 361 needs 65702 generators.</p>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/114">#114</a>): a check before each new generator; over the limit <code>pq</code>
+stops with <code>The number of pc generators would exceed the limit 65535</code>, which GAP turns into an error.</p>
+<p><b>Without a message?</b> Yes. <b>Default 2-group generation:</b> not affected; the $p$-covers of 2-groups of
+order at most $2^{11}$ have tens to hundreds of generators.</p>
+
+<h3 id="commutator-workspace">18. Too little workspace reserved for a commutator relation with an exponent</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-151">added 18.10.2026</a> · data: <a href="data.html#d-commutator-workspace"><code>commutator_workspace.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/109/files"><code>tst/commutator_workspace.tst</code></a></p>
+<p><b>Problem.</b> For a defining relation with a commutator raised to a power, <code>collect_relations</code>
+reserves $7 \cdot \mathrm{lastg} + 7$ words above the used workspace, but the collection of the commutator and
+<code>power</code> use $11 \cdot \mathrm{lastg} + 9$. Near the limit of the workspace, <code>power</code>
+overwrites the collected left side and data below it. ASan sees nothing: the writes stay inside the
+workspace.</p>
+<pre><code>F := FreeGroup("a", "b");; G := F / [Comm(F.2, F.1)^3];;
+Pq(G : Prime := 2, ClassBound := 3, Relators := ["[b,a]^3"], PqWorkspace := 210);   # order 2^7; right: 2^6
+Pq(G : Prime := 2, ClassBound := 3, PqWorkspace := 210);                            # 2^6</code></pre>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/109">#109</a>): reserve $11 \cdot \mathrm{lastg} + 9$; near the limit
+<code>pq</code> now stops with <code>Ran out of space</code>.</p>
+<p><b>Without a message?</b> Yes. <b>Default 2-group generation:</b> not affected; it needs a commutator power in
+the strings of the option <code>Relators</code> (pc groups send commutators with exponent 1), and a workspace
+(default $10^7$ words) within about $4 \cdot \mathrm{lastg}$ words of full.</p>
+
+<h3 id="sp-pquotient">19. <code>StandardPresentation</code> with a <code>pQuotient</code> in another pc presentation</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-159">added 18.10.2026</a> · data: <a href="data.html#d-sp-pquotient"><code>sp_pquotient.g</code></a></p>
+<p><b>Problem.</b> With the option <code>pQuotient := Q</code>, the automorphisms of $Q$ are sent to
+<code>pq</code> as exponents with respect to <code>PcgsPCentralSeriesPGroup(Q)</code>, but <code>pq</code> never
+sees $Q$: it computes its own pcp of the quotient of class $c - 1$ and reads the exponents in that basis. Where the
+two differ, <code>pq</code> works with maps that are not automorphisms of its group, and the standard presentation
+comes out different, or <code>pq</code> crashes. This is the mechanism of finding 1; its fix (#96) covers only the
+path of <code>PqDescendants</code>.</p>
+<pre><code>Key := F -&gt; List(RelatorsOfFpGroup(F), LetterRepAssocWord);;
+G := SmallGroup(64, 6);;              # 2-class 3
+Q := PcGroupCode(33300, 16);;         # a copy of its quotient of class 2, IdGroup [ 16, 3 ]
+Key(StandardPresentation(G : pQuotient := Q, ClassBound := 3)) = Key(StandardPresentation(G));   # false; fixed: true
+H := SmallGroup(64, 112);;
+StandardPresentation(H : pQuotient := PcGroupCode(2768831001, 32), ClassBound := 3);   # pq dies; fixed: the SP of H</code></pre>
+<p><b>Evidence.</b> All 177 groups of order 64 of 2-class at least 3, with two random copies of the quotient of
+class $c - 1$ each (354 copies): 59 wrong standard presentations and 109 crashes of <code>pq</code>, the same on
+master and on <code>correctness</code>; 0 and 0 with the fix. Every 25th group of order 128 and every 500th of
+order 256: 0 and 0 with the fix (the master runs there did not finish under the load of the machine; as far as
+they got, order 128 gave 3 wrong presentations and 5 crashes). With $Q$ the quotient computed by <code>pq</code>
+itself, or the SmallGroups group of the same id, no build differs.</p>
+<p><b>Cause.</b> <code>PQ_SP_STANDARD_PRESENTATION</code> (<code>lib/anupqi.gi:2418</code>) calls
+<code>PQ_AUT_INPUT(datarec, datarec.pQuotient)</code>, and $Q$ itself is not passed to <code>pq</code>.</p>
+<p><b>Fix</b> (fix prepared, pull request to come). Before the automorphisms are sent, GAP asks <code>pq</code> for its current
+pcp, as in finding 1, and takes the quotient of the $p$-cover by its last generators, which is <code>pq</code>'s
+group in its own pcp; the automorphisms are computed for that group. If its order is not $|Q|$, the call stops with
+an error. Even with the right basis, a <code>pQuotient</code> of class at least 2 does not give the canonical
+standard presentation: by design <code>pq</code> takes its pcp of the quotient as standard and standardises only
+from class $c + 1$ on. For an isomorphism test only class 1, the default, is suitable.</p>
+<p><b>Without a message?</b> Yes, for 59 of the 354 copies above; 109 crashed. <b>Default 2-group
+generation:</b> not affected; <code>PqDescendants</code> and <code>PqPCover</code> do not take this path, and
+<code>PqStandardPresentation</code> without <code>pQuotient</code> starts from class 1 with $GL(d,p)$, which does
+not depend on the basis. Inside the package <code>pQuotient</code> is passed only a quotient of class 1 or
+<code>pq</code>'s own output.</p>
+
+<h2 id="crashes">Second pass: crashes and errors</h2>
+
+<h3 id="gmp-separator">20. Saved group files with GMP</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-155">added 18.10.2026</a> · data: <a href="data.html#d-gmp-separator"><code>gmp_separator.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/105/files"><code>tst/gmp_separator.tst</code></a></p>
+<p><b>Problem.</b> With GMP, <code>save_pga</code> (<code>src/write.c:40</code>) writes the order of the
+automorphism group as decimal text and, without a separator, the binary record whose first field is
+<code>int p</code>. On reading, <code>mpz_inp_str</code> takes digits as long as they come; if the low byte of $p$
+is an ASCII digit ($p \bmod 256 \in [48, 57]$: 53, 307, 311, 313, 563, …), it goes into the number, and the record
+is read shifted by one byte.</p>
+<pre><code>PqDescendants(CyclicGroup(53) : StepSize := 1);   # pq dies; fixed: one group, IdGroup [ 2809, 1 ]</code></pre>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/105">#105</a>): a newline after the number, checked on reading.</p>
+<p><b>Without a message?</b> No; every case we ran crashed. <b>Default 2-group generation:</b> not affected; for
+$p = 2$ the first byte is 2, not a digit, and the output for 2-groups is the same with the fix.</p>
+
+<h3 id="stabiliser-space">21. Schreier words are written without a space check</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-148">added 18.10.2026</a> · data: <a href="data.html#d-stabiliser-space"><code>stabiliser_space.g</code></a></p>
+<p><b>Problem.</b> <code>stabiliser_generators</code> (<code>src/stabiliser.c:154–185</code>) writes Schreier
+words into the workspace and never checks for space. With genuine automorphisms the words are short (at most 25
+words measured, against about $10^7$ free); with maps that are not automorphisms (finding 1) a word never closes,
+overwrites <code>pq</code>'s tables at the top of the workspace, and then runs past the allocation.</p>
+<pre><code>G := PcGroupCode(723005982809892258877217511128, 256);;   # a copy of SmallGroup(256, 1325)
+PqDescendants(G : StepSize := 1);   # master: pq dies (ASan: heap-buffer-overflow, stabiliser.c:173); with #96: 7 groups</code></pre>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/108">#108</a>): a check before each letter; when space runs out, <code>Ran out of space
+during computation</code>, as elsewhere in <code>pq</code>. Shrinking <code>PqWorkspace</code> step by step, we found no
+size at which the earlier checks pass and only this loop overflows. There is no new test: after #96 this input no
+longer reaches the loop.</p>
+<p><b>Without a message?</b> On master, as a consequence of finding 1, memory is overwritten before the crash; we
+did not see a wrong answer from it. <b>Default 2-group generation:</b> not affected once #96 is in.</p>
+
+<h3 id="degree-overflow">22. Overflow of the number of allowable subgroups</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-157">added 18.10.2026</a> · data: <a href="data.html#d-degree-overflow"><code>degree_overflow.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/113/files"><code>tst/degree_overflow.tst</code></a></p>
+<p><b>Problem.</b> For standard presentations <code>pq</code> builds a permutation representation on allowable
+subgroups, of degree a Gaussian binomial coefficient, which for a large Frattini rank exceeds $2^{31}$.
+<code>compute_degree</code> detects this (<code>src/degree.c:51–60</code>) and prints a message, but under GAP
+(<code>pq -G</code> counts as interactive) it returns instead of exiting, and <code>pq</code> goes on with a
+partial degree until it crashes. GAP sees the message first and raises an error, so through GAP the result is a
+clean error; the standalone <code>pq</code> fed from a file crashed (SEGV).</p>
+<pre><code>G := PcGroupCode(5720184869874057666191942025326282294078349057, 2^9);;   # rank 6, class 2, |G'| = 2^3
+StandardPresentation(G);
+# Error, pq program terminated, with error condition:
+#   Evaluation in compute_degree may cause integer overflow</code></pre>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/113">#113</a>): exit in every mode. The limit itself stays (issue #32): a permutation
+representation of degree above $2^{31}$ is not practical.</p>
+<p><b>Without a message?</b> No. <b>Default 2-group generation:</b> <code>PqDescendants</code> is not affected.
+Standard presentations of some 2-groups of order $2^9$ to $2^{11}$ stop with this error, before and after the
+fix: for $p = 2$ the degree at the commutator stage is $\binom{q}{s}_2$ with $q = \binom{d}{2}$, which overflows
+from rank 6 with $|G'| \ge 2^3$, from rank 7 with $s \ge 2$, and always from rank 9. An error, never a wrong
+result.</p>
+
+<h2 id="data">Second pass: wrong data</h2>
+
+<h3 id="gap-relorders">23. The relative orders written for GAP repeat the last one</h3>
+<p class="added"><a href="history.html#e-verdict-MATH-154">added 18.10.2026</a> · data: <a href="data.html#d-relative-orders-gap"><code>relative_orders_gap.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/107/files"><code>tst/relative_orders_gap.tst</code></a></p>
+<p><b>Problem.</b> <code>GAP_auts</code> loops to <code>i &lt;= nmr_soluble</code> and then writes the last entry
+again (<code>src/GAP_present.c:336–340</code>), so <code>relativeOrders</code> in
+<code>ANUPQAutomorphisms</code> has one entry too many. <code>GAP_link_via_file.c:78</code> has the right
+bound.</p>
+<pre><code>des := PqDescendants(Pq(FreeGroup(2) : Prime := 3, ClassBound := 1) : StepSize := 1);;
+ANUPQAutomorphisms(des[3]).relativeOrders;   # [ 3, 2, 2 ] for 2 automorphisms; fixed: [ 3, 2 ]</code></pre>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/107">#107</a>): <code>&lt;</code> for <code>&lt;=</code>. Not changed: in
+<code>PqSupplementInnerAutomorphisms</code>, <code>agAutos</code> are the central automorphisms while the relative
+orders also cover the soluble part of the stabiliser, so <code>agOrder</code> and <code>agAutos</code> still differ
+in length; changing that changes the documented interface.</p>
+<p><b>Without a message?</b> Wrong data, no wrong group: <code>ANUPQAutomorphisms</code> is read only by
+<code>PqSupplementInnerAutomorphisms</code> and <code>SavePqList</code>; <code>PqDescendants</code> takes the
+automorphisms from AutPGrp. <b>Default 2-group generation:</b> not affected.</p>
+
+<h3 id="stabiliser-relative">24. The relative orders of a soluble stabiliser are not recomputed</h3>
+<p class="added"><a href="history.html#e-extra-MATH-172">added 18.10.2026</a> · data: <a href="data.html#d-stabiliser-relative"><code>stabiliser_relative.g</code></a> · test in the PR: <a href="https://github.com/gap-packages/anupq/pull/115/files"><code>tst/stabiliser_relative.tst</code></a></p>
+<p><b>Problem.</b> In the soluble branch of <code>stabiliser_of_rep</code> (<code>src/stabiliser.c:74–88</code>),
+<code>pq</code> builds the generators of the stabiliser but keeps <code>nmr_soluble</code> and the relative orders
+of the previous stage, so <code>ANUPQAutomorphisms(G).relativeOrders</code> can list more soluble generators than
+there are automorphisms.</p>
+<pre><code>for G in PqDescendants(Pq(FreeGroup(3) : Prime := 2, ClassBound := 1) : StepSize := 1) do
+  a := ANUPQAutomorphisms(G);
+  Print(Length(a.centralAutos) + Length(a.otherAutos), " ", Length(a.relativeOrders) - 1, "\n");
+od;   # 7 7, 4 5, 5 5, 3 5; fixed: 7 7, 4 4, 5 5, 3 3   (- 1: the repeated entry of finding 23)</code></pre>
+<p><b>Fix</b> (<a href="https://github.com/gap-packages/anupq/pull/115">#115</a>): recompute both from the Schreier words. Generator $t$ of the
+stabiliser is automorphism $\alpha_t$ times a word in automorphisms of smaller index, with $\alpha_t$ increasing,
+so the soluble ones are those with $\alpha_t$ at most the old <code>nmr_soluble</code>, with the old relative order
+of $\alpha_t$.</p>
+<p><b>Why the descendants are right anyway.</b> The stale values reach only the output for GAP and
+<code>pq</code>'s own group files. The one place where they could change orbits, the call to GAP for an insoluble
+stabiliser, never receives them (a probe build: 513 calls, no difference). Whole descendant trees of 2-groups to
+$2^7$ and 3-groups to $3^6$ against SmallGroups: 0 differences, on master and with the fix.</p>
+<p><b>Without a message?</b> Wrong data only. <b>Default 2-group generation:</b> not affected.</p>
+
+</main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), which relies on ANUPQ for p-group generation. Fixes: pull requests #96–#117; all of them together: branch <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a> at 23541ab. As of 18 October 2026.</small></div></footer>
 <script>(function(){var d=document.documentElement,K='gap-theme',
 b=document.querySelectorAll('.theme button');
 function show(){var t=d.getAttribute('data-theme')||'system';

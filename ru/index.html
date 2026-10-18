@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(d){d.classList.add('js');try{var t=localStorage.getItem('gap-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t)}catch(e){}})(document.documentElement)</script>
+
+<title>ANUPQ: проверка корректности</title>
+<meta name="description" content="Что мы проверили в ANUPQ, что нашли и какие исправления предлагаем.">
+<link rel="alternate" hreflang="en" href="https://ispacex.github.io/gap/index.html">
+<link rel="alternate" hreflang="ru" href="https://ispacex.github.io/gap/ru/index.html">
+<link rel="alternate" hreflang="x-default" href="https://ispacex.github.io/gap/index.html">
+<link rel="canonical" href="https://ispacex.github.io/gap/ru/index.html">
+<style>
+:root { --ink:#1f2933; --muted:#52606d; --line:#d9dee5; --bg:#ffffff; --soft:#f4f6f9;
+        --bad:#fde8e4; --badink:#a33a1f; --ok:#e7f4ea; --amb:#fff3d6; --acc:#2e6db4; --sel:rgba(46,109,180,.12);
+        --veil:rgba(15,20,30,.35); --imgpad:0; color-scheme:light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink:#e6e9ee; --muted:#a3adb9; --line:#38414c; --bg:#14181d; --soft:#1c2128; --bad:#4a2620;
+        --badink:#ffb4a2; --ok:#1f3a27; --amb:#4a3d1c; --acc:#7fb0ec; --sel:rgba(127,176,236,.2);
+        --veil:rgba(0,0,0,.6); --imgpad:6px; color-scheme:dark; } }
+:root[data-theme="dark"] { --ink:#e6e9ee; --muted:#a3adb9; --line:#38414c; --bg:#14181d; --soft:#1c2128; --bad:#4a2620;
+        --badink:#ffb4a2; --ok:#1f3a27; --amb:#4a3d1c; --acc:#7fb0ec; --sel:rgba(127,176,236,.2);
+        --veil:rgba(0,0,0,.6); --imgpad:6px; color-scheme:dark; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system, "Segoe UI", Roboto, "DejaVu Sans", sans-serif; }
+header { border-bottom:1px solid var(--line); background:var(--soft); }
+header .wrap { padding-top:.7rem; padding-bottom:.8rem; }
+header .top { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1rem; margin-bottom:.6rem; }
+header .title { font-weight:600; color:var(--ink); text-decoration:none; }
+header .tools { display:flex; align-items:center; gap:.6rem; margin-left:auto; }
+.lang { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; font-size:.85rem; line-height:1.6; }
+.lang a, .lang strong { padding:0 .6em; text-decoration:none; }
+.lang a { color:var(--acc); background:var(--bg); }
+.lang strong { background:var(--acc); color:var(--bg); }
+.lang > * + * { border-left:1px solid var(--line); }
+.theme { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; font-size:.85rem; line-height:1.6; }
+.theme button { display:inline-flex; align-items:center; height:1.6em; margin:0; padding:0 .5em; border:0; border-radius:0;
+        background:var(--bg); color:var(--muted); font:inherit; cursor:pointer; }
+.theme button + button { border-left:1px solid var(--line); }
+.theme button:hover { color:var(--acc); }
+.theme button:focus-visible { outline:2px solid var(--acc); outline-offset:-2px; }
+.theme button[aria-pressed="true"] { background:var(--acc); color:var(--bg); }
+.theme svg { width:1em; height:1em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
+html:not(.js) .theme { display:none; }
+#nav-palette, #nav-open { --p-bg:var(--bg); --p-fg:var(--ink); --p-line:var(--line); --p-sel:var(--sel);
+        --p-mark:var(--acc); --p-veil:var(--veil); }
+nav { display:flex; flex-wrap:wrap; gap:.4rem; }
+nav a { color:var(--acc); text-decoration:none; white-space:nowrap; font-size:.92rem; line-height:1.5;
+        padding:.15em .65em; border:1px solid var(--line); border-radius:6px; background:var(--bg); }
+nav a:hover, nav a:focus-visible { border-color:var(--acc); }
+nav a.cur { background:var(--acc); border-color:var(--acc); color:var(--bg); font-weight:600; }
+@media (max-width:520px) { nav { gap:.3rem; } nav a { font-size:.85rem; padding:.1em .5em; } }
+.wrap { max-width:1100px; margin:0 auto; padding:.9rem 16px; }
+h1 { font-size:1.6rem; margin:.6rem 0 .8rem; } h2 { font-size:1.25rem; margin-top:2rem; } h3 { font-size:1.07rem; margin-top:1.7rem; }
+pre { overflow-x:auto; background:var(--soft); padding:.6rem .8rem; border-radius:6px; }
+pre code { padding:0; }
+main p, main li, td { overflow-wrap:break-word; }
+.added { margin:-.5rem 0 .5rem; font-size:.82rem; } .added a { color:var(--muted); }
+a { color:var(--acc); } .muted { color:var(--muted); } small { color:var(--muted); }
+.tw { overflow-x:auto; margin:1rem 0; border:1px solid var(--line); border-radius:6px;
+      position:relative; }  /* KaTeX's absolutely placed pieces are clipped too, not left sticking out of the page */
+table { border-collapse:collapse; width:100%; font-size:.9rem; font-variant-numeric:tabular-nums; }
+th, td { border-bottom:1px solid var(--line); padding:.3rem .55rem; text-align:center; vertical-align:top; }
+th { background:var(--soft); position:sticky; top:0; }
+td.l, th.l { text-align:left; }
+tr.bad td { background:var(--bad); } td.bad { background:var(--bad); color:var(--badink); font-weight:600; }
+td.amb { background:var(--amb); } td.ok { background:var(--ok); }
+.box { border-left:4px solid var(--acc); background:var(--soft); padding:.7rem 1rem; margin:1rem 0; border-radius:0 6px 6px 0; }
+img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:6px; background:#fff; padding:var(--imgpad); }
+code { background:var(--soft); padding:0 .25em; border-radius:3px; }
+footer { border-top:1px solid var(--line); margin-top:3rem; }
+</style><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script></head>
+<body><header><div class="wrap"><div class="top"><a class="title" href="index.html">ANUPQ: проверка корректности</a>
+<div class="tools"><span class="theme" role="group" aria-label="Тема"><button type="button" data-t="system" aria-pressed="true" aria-label="Тема: системная" title="Тема: системная"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button><button type="button" data-t="light" aria-pressed="false" aria-label="Тема: светлая" title="Тема: светлая"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-t="dark" aria-pressed="false" aria-label="Тема: тёмная" title="Тема: тёмная"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></span><span class="lang" role="group" aria-label="Язык"><a href="../index.html" hreflang="en" lang="en">EN</a><strong lang="ru" aria-current="true">RU</strong></span></div></div>
+<nav aria-label="Разделы"><a href="index.html" class=cur aria-current=page>Сводка</a><a href="findings.html">Дефекты и исправления</a><a href="checks.html">Сверки</a><a href="open.html">Открытые вопросы</a><a href="history.html">История</a><a href="data.html">Данные и скрипты</a></nav></div></header>
+<main class="wrap">
+<h1>ANUPQ: проверка корректности</h1>
+
+<p>Мы используем ANUPQ (<code>PqDescendants</code>, <code>PqPCover</code>, <code>PqStandardPresentation</code>),
+чтобы обойти дерево построения 2-групп до порядка $2^{11}$. Пропущенный или лишний потомок здесь молча изменил
+бы математический результат. Сопровождающие пакета говорили, что им важна корректность вычислений; нам тоже.
+Здесь описано, что мы проверили, что нашли и какие исправления предлагаем: к каждому дефекту приложены
+воспроизведение, обоснование исправления и проверка.</p>
+
+<div class="box"><b>Коротко.</b> 24 дефекта, у каждого есть воспроизведение; 22 исправлены в PR #96–#117,
+исправления ещё двух готовы.
+<ul>
+<li><b>Первый проход</b> (#96–#104, девять дефектов): два <b>молча дают неверных потомков</b> (один из них
+к тому же роняет <code>pq</code>), один даёт неверный изоморфизм, ещё один роняет <code>pq</code>, один приводит
+к зависанию, четыре — ошибки или неверные данные на редко используемых путях. Оба тихих дефекта проявляются
+только в стороне от основного пути: при pc-презентации, отличной от собственной презентации <code>pq</code>,
+или при 127 и более автоморфизмах.</li>
+<li><b>Второй проход</b> (#105–#117 и два готовых исправления, пятнадцать дефектов): мы проверили каждый из 15 подозреваемых дефектов,
+которые оставались открытыми. Тринадцать подтвердились, два опровергнуты. По ходу нашлись
+ещё три: два исправлены, третий безвреден и оставлен открытым. Десять из пятнадцати могут дать <b>неверный
+результат без всякого сообщения</b>, но <b>ни один из них не достигается при построении 2-групп с параметрами
+по умолчанию</b>: для этого нужны опция <code>PcgsAutomorphisms</code>, заданные вручную автоморфизмы вместе с
+законом экспоненты, простое $p \ge 2^{15}$ или $p^d &gt; 10000$, pc-группа, не являющаяся $p$-группой, <code>pQuotient</code> класса 2 и выше в другой
+pc-презентации, больше
+65535 pc-порождающих или рабочая память на самом пределе.</li>
+</ul>
+В сверке с библиотекой SmallGroups <code>PqDescendants</code> на собственных группах библиотеки верен везде, где
+мы смотрели (3296 пар (группа, шаг), $p = 2, 3, 5, 7, 11$), а стандартные презентации инвариантны
+и различают группы на 927 группах.</div>
+
+<h2>Дефекты</h2>
+<div class="tw"><table>
+<tr><th class=l>Дефект</th><th class=l>Последствие</th><th class=l>Когда проявляется</th><th>Исправление</th></tr>
+<tr><th class=l colspan=4>Первый проход: PR #96–#104</th></tr>
+<tr><td class=l><a href="findings.html#aut-basis">Автоморфизмы передаются в чужом базисе</a></td><td class="l bad">неверные потомки; падение pq</td><td class=l><code>PqDescendants(G)</code> для pc-группы, чей pcgs не совпадает с pcp, который строит сам pq: из 2123 изоморфных копий групп SmallGroups порядков 64–256 неверных потомков дали 121, pq упал на 1</td><td><a href="https://github.com/gap-packages/anupq/pull/96">#96</a></td></tr>
+<tr><td class=l><a href="findings.html#char-counters">Счётчики орбит в <code>char</code></a></td><td class="l bad">неверные потомки и стабилизаторы</td><td class=l>127 и более автоморфизмов, например <code>AbelianGroup([2^3,2^5,2^7,2^9,2^11])</code>: 16384 потомка с шагом 1 вместо 26</td><td><a href="https://github.com/gap-packages/anupq/pull/99">#99</a></td></tr>
+<tr><td class=l><a href="findings.html#sp-epimorphism"><code>EpimorphismStandardPresentation</code></a></td><td class="l bad">отображение не биективно</td><td class=l>pc-группы, у которых порождающие не совпадают с pcgs, например <code>AbelianGroup(IsPcGroup,[4,2])</code>; сама стандартная презентация верна</td><td><a href="https://github.com/gap-packages/anupq/pull/100">#100</a></td></tr>
+<tr><td class=l><a href="findings.html#descendants-law">Закон экспоненты, которому группа не удовлетворяет</a></td><td class="l bad">падение pq</td><td class=l><code>PqDescendants(SmallGroup(16,5) : Exponent := 4)</code></td><td><a href="https://github.com/gap-packages/anupq/pull/97">#97</a></td></tr>
+<tr><td class=l><a href="findings.html#sp-relators">Ранг в SP при опции <code>Relators</code></a></td><td class="l amb">зависание</td><td class=l><code>PqStandardPresentation(F : Prime := 2, Relators := ["a^8", "b*a^-2"])</code></td><td><a href="https://github.com/gap-packages/anupq/pull/98">#98</a></td></tr>
+<tr><td class=l><a href="findings.html#stale-descendants">Старые группы в интерактивном <code>PqDescendants</code></a></td><td class="l bad">возвращаются лишние группы</td><td class=l>интерактивный процесс после <code>PqPGConstructDescendants</code></td><td><a href="https://github.com/gap-packages/anupq/pull/101">#101</a></td></tr>
+<tr><td class=l><a href="findings.html#savepqlist"><code>SavePqList</code></a></td><td class="l amb">файл не читается</td><td class=l>группа с заданной группой автоморфизмов</td><td><a href="https://github.com/gap-packages/anupq/pull/102">#102</a></td></tr>
+<tr><td class=l><a href="findings.html#relative-orders">Опция <code>RelativeOrders</code></a></td><td class="l amb">неверные данные или ошибка</td><td class=l><code>PqPGSupplyAutomorphisms(.. : RelativeOrders := [3, 2])</code></td><td><a href="https://github.com/gap-packages/anupq/pull/103">#103</a></td></tr>
+<tr><td class=l><a href="findings.html#isomorphic-trivial">Тривиальные группы в <code>IsIsomorphicPGroup</code></a></td><td class="l amb">ошибка</td><td class=l>две тривиальные группы</td><td><a href="https://github.com/gap-packages/anupq/pull/104">#104</a></td></tr>
+<tr><th class=l colspan=4>Второй проход: неверный результат без сообщения (ни один не достигается при построении 2-групп с параметрами по умолчанию)</th></tr>
+<tr><td class=l><a href="findings.html#pcgs-automorphisms">Опция <code>PcgsAutomorphisms</code> с последовательностью, не являющейся PAG</a></td><td class="l bad">неверные потомки (изоморфные повторы)</td><td class=l><code>PqDescendants(ElementaryAbelianGroup(4) : ClassBound := 3, PcgsAutomorphisms)</code>: 161 группа вместо 136</td><td><a href="https://github.com/gap-packages/anupq/pull/110">#110</a></td></tr>
+<tr><td class=l><a href="findings.html#exponent-reduced-list">Закон экспоненты при автоморфизмах, заданных вручную</a></td><td class="l bad">группа слишком велика</td><td class=l><code>PqSupplyAutomorphisms</code> с автоморфизмами, которые не индуцируют $GL(d,p)$, затем <code>PqNextClass</code> с <code>Exponent</code>: $2^{13}$ вместо $2^4$</td><td><a href="https://github.com/gap-packages/anupq/pull/112">#112</a></td></tr>
+<tr><td class=l><a href="findings.html#exponent-queue">Очередь закона экспоненты в классе 2</a></td><td class="l bad">неверные группы или падение pq (переполнение кучи)</td><td class=l><code>PqSupplyAutomorphisms</code>, порождающие $GL(d,2)$, $d \ge 7$, с <code>Exponent := 2</code>: например $2^{11}$ вместо $2^7$ в 6 прогонах из 10</td><td><a href="https://github.com/gap-packages/anupq/pull/106">#106</a></td></tr>
+<tr><td class=l><a href="findings.html#gl-order"><code>glOrder</code> при $p^d &gt; 10000$</a></td><td class="l bad">в pq передаются неверные стабилизаторы</td><td class=l><code>PqDescendants</code> для группы ранга $d$ с $p^d &gt; 10000$, например $(C_{101})^2$: <code>glOrder</code> 1020000/1030301 вместо 1030200</td><td><a href="https://github.com/gap-packages/anupq/pull/117">#117</a></td></tr>
+<tr><td class=l><a href="findings.html#epimorphism-non-pgroup"><code>PqEpimorphism</code> для pc-группы, не являющейся $p$-группой</a></td><td class="l bad">отображение не гомоморфизм, или ошибка</td><td class=l>порождающие не совпадают с pcgs, например порождающие pc-группы $S_3 \times C_4$ в обратном порядке</td><td><a href="https://github.com/gap-packages/anupq/pull/111">#111</a></td></tr>
+<tr><td class=l><a href="findings.html#interface-bookkeeping"><code>StepSize</code> больше ядерного ранга; временный каталог; имена групп</a></td><td class="l bad">неверные потомки при <code>PcgsAutomorphisms</code>; в остальных случаях ошибки</td><td class=l><code>PqDescendants(SmallGroup(4,2) : StepSize := 4, PcgsAutomorphisms)</code>: 3 группы вместо пустого списка; <code>ANUPQDirectoryTemporary</code>; имя группы с <code>_</code></td><td>исправление готово, PR готовится</td></tr>
+<tr><td class=l><a href="findings.html#prime-bound">Простые $p \ge 2^{15}$</a></td><td class="l bad">неверный эпиморфизм или $p$-накрытие</td><td class=l><code>PqEpimorphism(G : Prime := 32771, ClassBound := 1)</code>: соотношение группы $G$ в образе не выполняется</td><td><a href="https://github.com/gap-packages/anupq/pull/116">#116</a></td></tr>
+<tr><td class=l><a href="findings.html#pc-generator-limit">Больше 65535 pc-порождающих в одном классе</a></td><td class="l bad">испорченная презентация</td><td class=l><code>PqNextClass</code> для <code>FreeGroup(361)</code>, $p = 2$, переход от класса 1 к классу 2</td><td><a href="https://github.com/gap-packages/anupq/pull/114">#114</a></td></tr>
+<tr><td class=l><a href="findings.html#commutator-workspace">Рабочая память для коммутаторного соотношения с показателем</a></td><td class="l bad">неверный порядок</td><td class=l><code>Relators := ["[b,a]^3"]</code> при <code>PqWorkspace</code> у самого предела: $2^7$ вместо $2^6$</td><td><a href="https://github.com/gap-packages/anupq/pull/109">#109</a></td></tr>
+<tr><td class=l><a href="findings.html#sp-pquotient"><code>StandardPresentation</code> с <code>pQuotient</code> в другой pc-презентации</a></td><td class="l bad">неверная стандартная презентация; падение pq</td><td class=l><code>pQuotient := Q</code> класса не меньше 2, чей pcgs не совпадает с pcp pq: порядок 64, 354 копии, 59 неверных, 109 падений</td><td>исправление готово, PR готовится</td></tr>
+<tr><th class=l colspan=4>Второй проход: падения и ошибки</th></tr>
+<tr><td class=l><a href="findings.html#gmp-separator">Файлы сохранённых групп при сборке с GMP</a></td><td class="l bad">падение pq</td><td class=l><code>PqDescendants(CyclicGroup(53))</code>; любое $p$ с $p \bmod 256 \in [48, 57]$ (53, 307, 311, …)</td><td><a href="https://github.com/gap-packages/anupq/pull/105">#105</a></td></tr>
+<tr><td class=l><a href="findings.html#stabiliser-space">Слова Шрайера без проверки места</a></td><td class="l bad">затирание памяти; падение pq</td><td class=l>на master только через дефект 1, например копия <code>SmallGroup(256,1325)</code></td><td><a href="https://github.com/gap-packages/anupq/pull/108">#108</a></td></tr>
+<tr><td class=l><a href="findings.html#degree-overflow">Переполнение числа допустимых подгрупп</a></td><td class="l amb">ошибка; pq продолжал работу в испорченном состоянии</td><td class=l><code>StandardPresentation</code> групп большого ранга Фраттини, например ранга 6 порядка $2^9$ (задача #32 в трекере пакета)</td><td><a href="https://github.com/gap-packages/anupq/pull/113">#113</a></td></tr>
+<tr><th class=l colspan=4>Второй проход: неверные данные</th></tr>
+<tr><td class=l><a href="findings.html#gap-relorders">Относительные порядки, записанные для GAP</a></td><td class="l amb">неверные данные</td><td class=l><code>ANUPQAutomorphisms(D).relativeOrders</code> у потомка: последний элемент повторён</td><td><a href="https://github.com/gap-packages/anupq/pull/107">#107</a></td></tr>
+<tr><td class=l><a href="findings.html#stabiliser-relative">Относительные порядки разрешимого стабилизатора</a></td><td class="l amb">неверные данные</td><td class=l><code>ANUPQAutomorphisms</code> у потомков: разрешимых порождающих больше, чем автоморфизмов</td><td><a href="https://github.com/gap-packages/anupq/pull/115">#115</a></td></tr>
+</table></div>
+<p class=muted>Красный: неверный математический результат или падение. Жёлтый: ошибка, зависание или неверные
+вспомогательные данные; неверная группа не возвращается. Что ещё открыто и что мы проверили и опровергли — на
+странице <a href="open.html">«Открытые вопросы»</a>.</p>
+
+<h2>Все исправления вместе</h2>
+<p>Ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a> репозитория ispacex/anupq, коммит
+<a href="https://github.com/ispacex/anupq/commit/23541ab"><code>23541ab</code></a>, — это master 81bcf35 со всеми
+исправлениями #96–#117; тесты пакета на ней проходят (119 файлов, 0 ошибок). Исправлений дефектов
+15 и 19 в ней пока нет.</p>
+
+<h2>Как мы проверяли</h2>
+<ol>
+<li><b>Чтение кода.</b> Ядро на C (p-фактор и p-накрытие, собирание, согласованность, приведение к
+ступенчатому виду), построение p-групп (допустимые подгруппы, метки, орбиты, стабилизаторы, автоморфизмы),
+стандартные презентации и интерфейс GAP — с вниманием к граничным случаям: $p = 2$ и большие $p$, ранг 1,
+класс 1, ядро ранга 0, шаг больше ядра, много порождающих, много автоморфизмов, интерактивная и
+неинтерактивная работа.</li>
+<li><b>Сверки с независимыми данными</b> (<a href="checks.html">подробности</a>): потомки против библиотеки
+SmallGroups, та же группа в других pc-презентациях, стандартная презентация как инвариант изоморфизма,
+<code>pq</code> под AddressSanitizer.</li>
+<li><b>Каждое подозрение</b>, возникшее при чтении кода, затем воспроизведено или опровергнуто на master и на
+ветке с предыдущими исправлениями; для каждого подтверждённого мы указываем, может ли он дать неверный результат
+без сообщения и могут ли его задеть наши собственные прогоны.</li>
+<li><b>К каждому исправлению</b> приложен тест, который падает до исправления и проходит после (кроме случая,
+когда после более раннего исправления вход уже не доходит до этого кода, как в дефекте 21); тесты пакета
+проходят с каждым исправлением по отдельности и со всеми вместе.</li>
+</ol>
+
+<h2>Что оказалось верным</h2>
+<ul>
+<li><code>PqDescendants</code> на группах SmallGroups: для каждой группы $G$ порядка $p^m$ и каждого шага $s$,
+при котором $p^{m+s}$ в пределах библиотеки, потомки — это в точности группы $H$ порядка $p^{m+s}$ с
+$H/P_c(H) \cong G$ (как мультимножества <code>IdGroup</code>): $p = 2$ до порядка $2^8$, $p = 3$ до $3^6$,
+$p = 5$ до $5^5$, $p = 7, 11$ до $p^4$; 3296 пар, 0 расхождений.</li>
+<li><code>PqStandardPresentation</code> как ключ изоморфизма: все группы порядков 2, 3, 4, 8, 16, 32, 64, 243, 625, 729 получают попарно
+различные стандартные презентации, каждая из них задаёт свою группу, а изоморфные копии в других
+pc-презентациях получают ту же самую (927 групп, 0 ошибок; порядок 128 пересчитывается).</li>
+<li>Собиратели для $p = 2$ и нечётных $p$, согласованность и хвосты, приведение к ступенчатому виду,
+перевод между метками и подгруппами, проверка допустимости $U + N = M$, центральные автоморфизмы, алгоритм
+орбит неразрешимой группы и перестановочное представление $A/S$, передаваемое в AutPGrp (PR #85): прочитаны и
+признаны верными.</li>
+</ul>
+
+<h2>Окружение</h2>
+<p>GAP 4.16.1, AutPGrp 1.13.0, ANUPQ master 81bcf35 (с GMP), macOS 26 на arm64 (Apple clang); проверки
+исправлений повторены с <code>pq</code>, собранным с <code>-fsanitize=address</code>. Всё, что нужно для
+повторения, — на странице <a href="data.html">«Данные и скрипты»</a>.</p>
+
+</main><footer><div class="wrap"><small>Проверка пакета GAP ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master 81bcf35), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. Исправления: PR #96–#117; все вместе — ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a>, коммит 23541ab. Состояние на 18 октября 2026 г..</small></div></footer>
+<script>(function(){var d=document.documentElement,K='gap-theme',
+b=document.querySelectorAll('.theme button');
+function show(){var t=d.getAttribute('data-theme')||'system';
+for(var i=0;i<b.length;i++)b[i].setAttribute('aria-pressed',b[i].getAttribute('data-t')===t?'true':'false')}
+function set(t){if(t==='light'||t==='dark')d.setAttribute('data-theme',t);else{t='system';d.removeAttribute('data-theme')}show();return t}
+for(var i=0;i<b.length;i++)b[i].addEventListener('click',function(){var t=set(this.getAttribute('data-t'));
+try{if(t==='system')localStorage.removeItem(K);else localStorage.setItem(K,t)}catch(e){}});
+addEventListener('storage',function(e){if(e.key===K)set(e.newValue)});show()})()</script>
+
+</body></html>

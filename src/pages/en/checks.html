@@ -1,0 +1,58 @@
+<h1>Differential checks</h1>
+
+<h2 id="smallgroups">Descendants against the SmallGroups library</h2>
+<p>For a $p$-group $H$ of $p$-class $c \ge 2$, its parent in the tree is $H / P_c(H)$ and its step is
+$\log_p |P_c(H)|$. So for $G$ of order $p^m$ and a step $s$ the immediate descendants of $G$ are exactly the
+groups $H$ of order $p^{m+s}$ with $H / P_c(H) \cong G$. <code>desc_vs_sg.g</code> compares, for every $G$ in the
+library and every $s$ in range, the multiset of <code>IdGroup</code> of <code>PqDescendants(G : StepSize := s)</code>
+with that set (elementary abelian groups of rank $\ge 5$ only for $s = 1$: larger steps there take hours).</p>
+<div class="tw"><table><tr><th>$p$</th><th>orders of $G$</th><th>pairs $(G, s)$</th><th>differences</th></tr>
+<tr><td>2</td><td>$2 \dots 2^7$, descendants to $2^8$</td><td>3112</td><td class=ok>0</td></tr>
+<tr><td>3</td><td>$3 \dots 3^5$, to $3^6$</td><td>125</td><td class=ok>0</td></tr>
+<tr><td>5</td><td>to $5^5$</td><td>35</td><td class=ok>0</td></tr>
+<tr><td>7</td><td>to $7^4$</td><td>12</td><td class=ok>0</td></tr>
+<tr><td>11</td><td>to $11^4$</td><td>12</td><td class=ok>0</td></tr></table></div>
+<p>This is a check of <code>pq</code> on the library's own presentations, which are <code>pq</code>'s: it cannot
+see <a href="findings.html#aut-basis">finding 1</a>. Some of the step sizes are larger than the nuclear rank of
+$G$; for those the empty answer is right, but, as <a href="findings.html#interface-bookkeeping">finding 15</a>
+shows, <code>pq</code> reaches it through a desynchronised dialogue. Without <code>PcgsAutomorphisms</code>, as
+here, the answer is the right one.</p>
+
+<h2 id="copies">Descendants of other presentations of the same group</h2>
+<p>The descendants of a group cannot depend on its presentation. <code>coords.g</code> compares
+<code>PqDescendants(G : StepSize := 1)</code> for $G$ = <code>SmallGroup(n, k)</code> ($n$ = 32, 64, 128,
+$p$-class $\ge 3$, every third $k$) with three isomorphic copies: the special pcgs, a pcgs of a permutation
+representation, and <code>pq</code>'s own presentation of the fp group. On master, in this run, the first difference appears
+at order 128 (<code>SmallGroup(128, 3)</code>: 10 descendants, 8 for a copy), and 17 groups differ before
+<code>pq</code> dies at <code>SmallGroup(128, 1728)</code>; with <a href="findings.html#aut-basis">fix 1</a>:
+{{coords_total}} comparisons in each of four runs, 0 differences, also under AddressSanitizer with three seeds. The fixed list of
+copies in the table of finding 1 (<code>gen_codes.g</code>, <code>check_codes.g</code>) is the reproducible
+version of this check.</p>
+
+<h2 id="sp">Standard presentations as an isomorphism key</h2>
+<p><code>spcheck.g</code>: for every group of the order, its standard presentation is a presentation of it
+(<code>IdGroup</code> of <code>PcGroupFpGroup</code>), different groups get different ones, and copies in another
+pc presentation get the same one.</p>
+<div class="tw"><table><tr><th>order</th><th>groups</th><th>copies each</th><th>failures</th></tr>
+{{sp_rows}}</table></div>
+<p class=muted>Order 128: the first run died because <code>pq</code> was killed from outside, by a
+<code>pkill</code> issued during the audit itself (<a href="open.html#refuted">Open items</a>); it is being
+rerun on master and on <code>correctness</code>. The one death of <code>pq</code> in a run of order 64 had the
+same cause; order 64 was rerun six times (6408 calls) without a failure.</p>
+
+<h2 id="dimension-subrings">The pq2048 walk with its own covers and children</h2>
+<p>With <code>PQ2048_OWNCOVER=1 PQ2048_OWNDESC=1</code>, the D₅ project builds $p$-covers with GAP's
+<code>Extension</code> and step-1 children as pc quotients of them, and calls <code>PqDescendants</code> on those
+children: exactly the inputs of finding 1. For all 304 vertices of orders 16–64 of class $\le 3$, the 1186
+children were compared with their SmallGroups copies (descendants by <code>IdGroup</code>, up to order 256):
+0 differences on master. Beyond that we did not check; the fix removes the question.</p>
+
+<h2 id="asan">AddressSanitizer</h2>
+<p><code>pq</code> built with <code>-fsanitize=address</code>, run with the fixes through the copies above
+and the standard presentation check of order 64: no report. On master, the crash of finding 1 is a
+<code>heap-buffer-overflow</code> in <code>stabiliser_generators</code> (<code>stabiliser.c:173</code>): with maps that are
+not automorphisms a Schreier word never closes, and the loop writes past the end of the workspace, which it never
+checks (<a href="findings.html#stabiliser-space">finding 21</a>). In the second pass ASan showed the
+heap overflows of findings <a href="findings.html#exponent-queue">12</a> and 21 on master and nothing with their
+fixes; what ASan alone sees at a tiny workspace is on <a href="open.html">Open items</a>. The crash of finding 4 leaves no report: <code>pq</code> exits
+on the input that does not fit it.</p>

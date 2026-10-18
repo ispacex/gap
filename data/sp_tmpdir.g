@@ -1,0 +1,11 @@
+LoadPackage("anupq");
+old := ANUPQData.SPimages;
+d := Filename(DirectoryTemporary(), "newpqdir");
+ANUPQDirectoryTemporary(d);
+Print("tmpdir    = ", ANUPQData.tmpdir, "\nSPimages  = ", ANUPQData.SPimages, "\n");
+Print("SPimages in new tmpdir? ", StartsWith(ANUPQData.SPimages, d), "\n");
+F := FreeGroup(2); G := F/[F.1^4, F.2^4, Comm(F.1,F.2)];
+S := PqStandardPresentation(G : Prime := 2, ClassBound := 3);
+Print("result: ", S, "\n");
+Print("files in new dir: ", DirectoryContents(d), "\n");
+QUIT;

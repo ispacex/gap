@@ -4,6 +4,10 @@
 
 <title>Differential checks — ANUPQ: a correctness audit</title>
 <meta name="description" content="Descendants against SmallGroups, other presentations, standard presentations.">
+<link rel="alternate" hreflang="en" href="https://ispacex.github.io/gap/checks.html">
+<link rel="alternate" hreflang="ru" href="https://ispacex.github.io/gap/ru/checks.html">
+<link rel="alternate" hreflang="x-default" href="https://ispacex.github.io/gap/checks.html">
+<link rel="canonical" href="https://ispacex.github.io/gap/checks.html">
 <style>
 :root { --ink:#1f2933; --muted:#52606d; --line:#d9dee5; --bg:#ffffff; --soft:#f4f6f9;
         --bad:#fde8e4; --badink:#a33a1f; --ok:#e7f4ea; --amb:#fff3d6; --acc:#2e6db4; --sel:rgba(46,109,180,.12);
@@ -44,7 +48,11 @@ nav a:hover, nav a:focus-visible { border-color:var(--acc); }
 nav a.cur { background:var(--acc); border-color:var(--acc); color:var(--bg); font-weight:600; }
 @media (max-width:520px) { nav { gap:.3rem; } nav a { font-size:.85rem; padding:.1em .5em; } }
 .wrap { max-width:1100px; margin:0 auto; padding:.9rem 16px; }
-h1 { font-size:1.6rem; margin:.6rem 0 .8rem; } h2 { font-size:1.25rem; margin-top:2rem; }
+h1 { font-size:1.6rem; margin:.6rem 0 .8rem; } h2 { font-size:1.25rem; margin-top:2rem; } h3 { font-size:1.07rem; margin-top:1.7rem; }
+pre { overflow-x:auto; background:var(--soft); padding:.6rem .8rem; border-radius:6px; }
+pre code { padding:0; }
+main p, main li, td { overflow-wrap:break-word; }
+.added { margin:-.5rem 0 .5rem; font-size:.82rem; } .added a { color:var(--muted); }
 a { color:var(--acc); } .muted { color:var(--muted); } small { color:var(--muted); }
 .tw { overflow-x:auto; margin:1rem 0; border:1px solid var(--line); border-radius:6px;
       position:relative; }  /* KaTeX's absolutely placed pieces are clipped too, not left sticking out of the page */
@@ -65,9 +73,8 @@ footer { border-top:1px solid var(--line); margin-top:3rem; }
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script></head>
 <body><header><div class="wrap"><div class="top"><a class="title" href="index.html">ANUPQ: a correctness audit</a>
-<div class="tools"><span class="theme" role="group" aria-label="Theme"><button type="button" data-t="system" aria-pressed="true" aria-label="Theme: system" title="Theme: system"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button><button type="button" data-t="light" aria-pressed="false" aria-label="Theme: light" title="Theme: light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-t="dark" aria-pressed="false" aria-label="Theme: dark" title="Theme: dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></span><span class="lang" role="group" aria-label="Language"><strong lang="en" aria-current="true">EN</strong><a href="ru/index.html" hreflang="ru" lang="ru">RU</a></span></div>
-</div>
-<nav aria-label="Sections"><a href="index.html">Summary</a><a href="findings.html">Findings and fixes</a><a href="checks.html" class=cur aria-current=page>Differential checks</a><a href="open.html">Open items</a><a href="data.html">Data and scripts</a></nav></div></header>
+<div class="tools"><span class="theme" role="group" aria-label="Theme"><button type="button" data-t="system" aria-pressed="true" aria-label="Theme: system" title="Theme: system"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button><button type="button" data-t="light" aria-pressed="false" aria-label="Theme: light" title="Theme: light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-t="dark" aria-pressed="false" aria-label="Theme: dark" title="Theme: dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></span><span class="lang" role="group" aria-label="Language"><strong lang="en" aria-current="true">EN</strong><a href="ru/checks.html" hreflang="ru" lang="ru">RU</a></span></div></div>
+<nav aria-label="Sections"><a href="index.html">Summary</a><a href="findings.html">Findings and fixes</a><a href="checks.html" class=cur aria-current=page>Differential checks</a><a href="open.html">Open items</a><a href="history.html">History</a><a href="data.html">Data and scripts</a></nav></div></header>
 <main class="wrap">
 <h1>Differential checks</h1>
 
@@ -84,7 +91,10 @@ with that set (elementary abelian groups of rank $\ge 5$ only for $s = 1$: large
 <tr><td>7</td><td>to $7^4$</td><td>12</td><td class=ok>0</td></tr>
 <tr><td>11</td><td>to $11^4$</td><td>12</td><td class=ok>0</td></tr></table></div>
 <p>This is a check of <code>pq</code> on the library's own presentations, which are <code>pq</code>'s: it cannot
-see <a href="findings.html#aut-basis">finding 1</a>.</p>
+see <a href="findings.html#aut-basis">finding 1</a>. Some of the step sizes are larger than the nuclear rank of
+$G$; for those the empty answer is right, but, as <a href="findings.html#interface-bookkeeping">finding 15</a>
+shows, <code>pq</code> reaches it through a desynchronised dialogue. Without <code>PcgsAutomorphisms</code>, as
+here, the answer is the right one.</p>
 
 <h2 id="copies">Descendants of other presentations of the same group</h2>
 <p>The descendants of a group cannot depend on its presentation. <code>coords.g</code> compares
@@ -93,7 +103,7 @@ $p$-class $\ge 3$, every third $k$) with three isomorphic copies: the special pc
 representation, and <code>pq</code>'s own presentation of the fp group. On master, in this run, the first difference appears
 at order 128 (<code>SmallGroup(128, 3)</code>: 10 descendants, 8 for a copy), and 17 groups differ before
 <code>pq</code> dies at <code>SmallGroup(128, 1728)</code>; with <a href="findings.html#aut-basis">fix 1</a>:
-1983 (in each of four runs) comparisons, 0 differences, also under AddressSanitizer with three seeds. The fixed list of
+1983 comparisons in each of four runs, 0 differences, also under AddressSanitizer with three seeds. The fixed list of
 copies in the table of finding 1 (<code>gen_codes.g</code>, <code>check_codes.g</code>) is the reproducible
 version of this check.</p>
 
@@ -102,7 +112,11 @@ version of this check.</p>
 (<code>IdGroup</code> of <code>PcGroupFpGroup</code>), different groups get different ones, and copies in another
 pc presentation get the same one.</p>
 <div class="tw"><table><tr><th>order</th><th>groups</th><th>copies each</th><th>failures</th></tr>
-<tr><td>2</td><td>1</td><td>3</td><td class=ok>0</td></tr><tr><td>3</td><td>1</td><td>3</td><td class=ok>0</td></tr><tr><td>4</td><td>2</td><td>5</td><td class=ok>0</td></tr><tr><td>8</td><td>5</td><td>5</td><td class=ok>0</td></tr><tr><td>16</td><td>14</td><td>5</td><td class=ok>0</td></tr><tr><td>32</td><td>51</td><td>5</td><td class=ok>0</td></tr><tr><td>64</td><td>267</td><td>3</td><td class=ok>0</td></tr><tr><td>243</td><td>67</td><td>3</td><td class=ok>0</td></tr><tr><td>625</td><td>15</td><td>3</td><td class=ok>0</td></tr><tr><td>729</td><td>504</td><td>1</td><td class=ok>0</td></tr></table></div>
+<tr><td>2</td><td>1</td><td>3</td><td class=ok>0</td></tr><tr><td>3</td><td>1</td><td>3</td><td class=ok>0</td></tr><tr><td>4</td><td>2</td><td>5</td><td class=ok>0</td></tr><tr><td>8</td><td>5</td><td>5</td><td class=ok>0</td></tr><tr><td>16</td><td>14</td><td>5</td><td class=ok>0</td></tr><tr><td>32</td><td>51</td><td>5</td><td class=ok>0</td></tr><tr><td>64</td><td>267</td><td>3</td><td class=ok>0</td></tr><tr><td>243</td><td>67</td><td>3</td><td class=ok>0</td></tr><tr><td>625</td><td>15</td><td>3</td><td class=ok>0</td></tr><tr><td>729</td><td>504</td><td>1</td><td class=ok>0</td></tr><tr><td>128</td><td>2328</td><td>1</td><td class=amb>rerun in progress</td></tr></table></div>
+<p class=muted>Order 128: the first run died because <code>pq</code> was killed from outside, by a
+<code>pkill</code> issued during the audit itself (<a href="open.html#refuted">Open items</a>); it is being
+rerun on master and on <code>correctness</code>. The one death of <code>pq</code> in a run of order 64 had the
+same cause; order 64 was rerun six times (6408 calls) without a failure.</p>
 
 <h2 id="dimension-subrings">The pq2048 walk with its own covers and children</h2>
 <p>With <code>PQ2048_OWNCOVER=1 PQ2048_OWNDESC=1</code>, the D₅ project builds $p$-covers with GAP's
@@ -114,14 +128,14 @@ children were compared with their SmallGroups copies (descendants by <code>IdGro
 <h2 id="asan">AddressSanitizer</h2>
 <p><code>pq</code> built with <code>-fsanitize=address</code>, run with the fixes through the copies above
 and the standard presentation check of order 64: no report. On master, the crash of finding 1 is a
-heap-buffer-overflow in <code>stabiliser_generators</code> (<code>stabiliser.c:173</code>): with maps that are
+<code>heap-buffer-overflow</code> in <code>stabiliser_generators</code> (<code>stabiliser.c:173</code>): with maps that are
 not automorphisms a Schreier word never closes, and the loop writes past the end of the workspace, which it never
-checks (see <a href="open.html">Open items</a>). The crash of finding 4 leaves no report: <code>pq</code> exits
+checks (<a href="findings.html#stabiliser-space">finding 21</a>). In the second pass ASan showed the
+heap overflows of findings <a href="findings.html#exponent-queue">12</a> and 21 on master and nothing with their
+fixes; what ASan alone sees at a tiny workspace is on <a href="open.html">Open items</a>. The crash of finding 4 leaves no report: <code>pq</code> exits
 on the input that does not fit it.</p>
 
-</main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master
-at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>),
-which relies on ANUPQ for p-group generation. As of 18 October 2026.</small></div></footer>
+</main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), which relies on ANUPQ for p-group generation. Fixes: pull requests #96–#117; all of them together: branch <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a> at 23541ab. As of 18 October 2026.</small></div></footer>
 <script>(function(){var d=document.documentElement,K='gap-theme',
 b=document.querySelectorAll('.theme button');
 function show(){var t=d.getAttribute('data-theme')||'system';

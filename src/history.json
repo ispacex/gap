@@ -1,0 +1,401 @@
+{
+ "_comment": "One entry per event; times in UTC. 'pr_created' and 'pr_states' come from gh (python3 src/build.py --refresh updates pr_states).",
+ "events": [
+  {
+   "date": "2026-10-17",
+   "time": "22:28",
+   "kind": "text",
+   "id": "published",
+   "findings": [
+    "aut-basis",
+    "char-counters",
+    "sp-epimorphism",
+    "descendants-law",
+    "sp-relators",
+    "stale-descendants",
+    "savepqlist",
+    "relative-orders",
+    "isomorphic-trivial"
+   ],
+   "text": {
+    "en": "Audit published (site commit 43e5f26): findings 1–9, the differential checks, and 15 suspected defects on Open items.",
+    "ru": "Аудит опубликован (коммит сайта 43e5f26): дефекты 1–9, сверки и 15 подозреваемых дефектов на странице «Открытые вопросы»."
+   }
+  },
+  {
+   "date": "2026-10-17",
+   "time": "23:01",
+   "kind": "prs",
+   "prs": [
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104
+   ]
+  },
+  {
+   "date": "2026-10-17",
+   "time": "23:02",
+   "kind": "text",
+   "text": {
+    "en": "Site: pull requests #96–#104 linked from the findings (site commit c9d9ae8).",
+    "ru": "Сайт: на PR #96–#104 даны ссылки из дефектов (коммит сайта c9d9ae8)."
+   }
+  },
+  {
+   "date": "2026-10-18",
+   "time": "05:58",
+   "kind": "verdict",
+   "issue": "MATH-152",
+   "item": 5,
+   "verdict": "confirmed",
+   "finding": "exponent-queue"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:00",
+   "kind": "verdict",
+   "issue": "MATH-155",
+   "item": 8,
+   "verdict": "confirmed",
+   "finding": "gmp-separator"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:11",
+   "kind": "verdict",
+   "issue": "MATH-149",
+   "item": 2,
+   "verdict": "confirmed",
+   "finding": "pc-generator-limit"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:18",
+   "kind": "verdict",
+   "issue": "MATH-154",
+   "item": 7,
+   "verdict": "confirmed",
+   "finding": "gap-relorders"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:39",
+   "kind": "verdict",
+   "issue": "MATH-148",
+   "item": 1,
+   "verdict": "confirmed",
+   "finding": "stabiliser-space"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:41",
+   "kind": "verdict",
+   "issue": "MATH-153",
+   "item": 6,
+   "verdict": "refuted",
+   "finding": null
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:41",
+   "kind": "verdict",
+   "issue": "MATH-158",
+   "item": 11,
+   "verdict": "confirmed",
+   "finding": "epimorphism-non-pgroup"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:42",
+   "kind": "verdict",
+   "issue": "MATH-151",
+   "item": 4,
+   "verdict": "confirmed",
+   "finding": "commutator-workspace"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:51",
+   "kind": "verdict",
+   "issue": "MATH-161",
+   "item": 14,
+   "verdict": "confirmed",
+   "finding": "pcgs-automorphisms"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:01",
+   "kind": "verdict",
+   "issue": "MATH-160",
+   "item": 13,
+   "verdict": "confirmed",
+   "finding": "interface-bookkeeping"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:06",
+   "kind": "verdict",
+   "issue": "MATH-156",
+   "item": 9,
+   "verdict": "confirmed",
+   "finding": "gl-order"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:16",
+   "kind": "verdict",
+   "issue": "MATH-150",
+   "item": 3,
+   "verdict": "confirmed",
+   "finding": "prime-bound"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:21",
+   "kind": "verdict",
+   "issue": "MATH-157",
+   "item": 10,
+   "verdict": "confirmed",
+   "finding": "degree-overflow"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:50",
+   "kind": "verdict",
+   "issue": "MATH-162",
+   "item": 15,
+   "verdict": "refuted",
+   "finding": null
+  },
+  {
+   "date": "2026-10-18",
+   "time": "10:28",
+   "kind": "verdict",
+   "issue": "MATH-159",
+   "item": 12,
+   "verdict": "confirmed",
+   "finding": "sp-pquotient"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:00",
+   "kind": "found",
+   "issue": "MATH-163",
+   "via": "MATH-152"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:20",
+   "kind": "found",
+   "issue": "MATH-172",
+   "via": "MATH-154"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:39",
+   "kind": "found",
+   "issue": "MATH-175",
+   "via": "MATH-148"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:55",
+   "kind": "extra",
+   "issue": "MATH-163",
+   "finding": "exponent-reduced-list"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:50",
+   "kind": "extra",
+   "issue": "MATH-172",
+   "finding": "stabiliser-relative"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "10:09",
+   "kind": "extra",
+   "issue": "MATH-175",
+   "finding": null,
+   "note": {
+    "en": "confirmed, harmless (only AddressSanitizer sees it, workspace below about 1000 words); stays on Open items, no pull request.",
+    "ru": "подтверждено, безвредно (видно только AddressSanitizer, рабочая память меньше примерно 1000 слов); остаётся в «Открытых вопросах», без PR."
+   }
+  },
+  {
+   "date": "2026-10-18",
+   "time": "06:54",
+   "kind": "pr",
+   "pr": 105,
+   "finding": "gmp-separator"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:08",
+   "kind": "pr",
+   "pr": 106,
+   "finding": "exponent-queue"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:22",
+   "kind": "pr",
+   "pr": 107,
+   "finding": "gap-relorders"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:25",
+   "kind": "pr",
+   "pr": 108,
+   "finding": "stabiliser-space"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:32",
+   "kind": "pr",
+   "pr": 109,
+   "finding": "commutator-workspace"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:38",
+   "kind": "pr",
+   "pr": 110,
+   "finding": "pcgs-automorphisms"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "08:02",
+   "kind": "pr",
+   "pr": 111,
+   "finding": "epimorphism-non-pgroup"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "08:10",
+   "kind": "pr",
+   "pr": 112,
+   "finding": "exponent-reduced-list"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "08:17",
+   "kind": "pr",
+   "pr": 113,
+   "finding": "degree-overflow"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "09:03",
+   "kind": "pr",
+   "pr": 114,
+   "finding": "pc-generator-limit"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "09:03",
+   "kind": "pr",
+   "pr": 115,
+   "finding": "stabiliser-relative"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "09:05",
+   "kind": "pr",
+   "pr": 116,
+   "finding": "prime-bound"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "09:07",
+   "kind": "pr",
+   "pr": 117,
+   "finding": "gl-order"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "07:51",
+   "kind": "text",
+   "id": "sp128",
+   "text": {
+    "en": "Rerun of the order-128 standard presentation check started (the first run was killed from outside); result pending.",
+    "ru": "Начат повторный прогон проверки стандартных презентаций порядка 128 (первый прогон был убит извне); результат ожидается."
+   }
+  },
+  {
+   "date": "2026-10-18",
+   "time": "09:10",
+   "kind": "text",
+   "text": {
+    "en": "Branch <code>correctness</code> of ispacex/anupq fast-forwarded to 23541ab: master with all fixes #96–#117; 119 test files pass.",
+    "ru": "Ветка <code>correctness</code> репозитория ispacex/anupq продвинута до 23541ab: master со всеми исправлениями #96–#117; проходят 119 файлов тестов."
+   }
+  },
+  {
+   "date": "2026-10-18",
+   "time": "",
+   "kind": "text",
+   "id": "site-update",
+   "text": {
+    "en": "Site: second-pass findings 10–24, Open items reduced to two documented risks and a refuted list, Russian version, this history page.",
+    "ru": "Сайт: дефекты второго прохода 10–24, «Открытые вопросы» сведены к двум известным рискам и списку опровергнутого, русская версия, эта страница истории."
+   }
+  }
+ ],
+ "pr_created": {
+  "96": "2026-10-17",
+  "97": "2026-10-17",
+  "98": "2026-10-17",
+  "99": "2026-10-17",
+  "100": "2026-10-17",
+  "101": "2026-10-17",
+  "102": "2026-10-17",
+  "103": "2026-10-17",
+  "104": "2026-10-17",
+  "105": "2026-10-18",
+  "106": "2026-10-18",
+  "107": "2026-10-18",
+  "108": "2026-10-18",
+  "109": "2026-10-18",
+  "110": "2026-10-18",
+  "111": "2026-10-18",
+  "112": "2026-10-18",
+  "113": "2026-10-18",
+  "114": "2026-10-18",
+  "115": "2026-10-18",
+  "116": "2026-10-18",
+  "117": "2026-10-18"
+ },
+ "pr_states": {
+  "96": "open",
+  "97": "open",
+  "98": "open",
+  "99": "open",
+  "100": "open",
+  "101": "open",
+  "102": "open",
+  "103": "open",
+  "104": "open",
+  "105": "open",
+  "106": "open",
+  "107": "open",
+  "108": "open",
+  "109": "open",
+  "110": "open",
+  "111": "open",
+  "112": "open",
+  "113": "open",
+  "114": "open",
+  "115": "open",
+  "116": "open",
+  "117": "open"
+ },
+ "pr_states_as_of": "2026-10-18"
+}

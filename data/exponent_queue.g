@@ -1,0 +1,11 @@
+LoadPackage("anupq");
+d := 7;;
+F := FreeGroup(d);;
+procId := PqStart(F : Prime := 2, Exponent := 2);;
+PqPcPresentation(procId : ClassBound := 1);;
+c := PermutationMat(CycleFromList([1..d]), d);; t := IdentityMat(d);; t[1][2] := 1;;
+PqSupplyAutomorphisms(procId, [ c, t ]);;
+PqNextClass(procId);
+Print("RESULT ", PqFactoredOrder(procId), " ", PqPClass(procId), "\n");
+PqQuitAll();
+QUIT;

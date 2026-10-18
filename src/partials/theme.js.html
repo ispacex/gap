@@ -1,0 +1,8 @@
+<script>(function(){var d=document.documentElement,K='gap-theme',
+b=document.querySelectorAll('.theme button');
+function show(){var t=d.getAttribute('data-theme')||'system';
+for(var i=0;i<b.length;i++)b[i].setAttribute('aria-pressed',b[i].getAttribute('data-t')===t?'true':'false')}
+function set(t){if(t==='light'||t==='dark')d.setAttribute('data-theme',t);else{t='system';d.removeAttribute('data-theme')}show();return t}
+for(var i=0;i<b.length;i++)b[i].addEventListener('click',function(){var t=set(this.getAttribute('data-t'));
+try{if(t==='system')localStorage.removeItem(K);else localStorage.setItem(K,t)}catch(e){}});
+addEventListener('storage',function(e){if(e.key===K)set(e.newValue)});show()})()</script>

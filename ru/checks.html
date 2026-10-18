@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<script>(function(d){d.classList.add('js');try{var t=localStorage.getItem('gap-theme');if(t==='light'||t==='dark')d.setAttribute('data-theme',t)}catch(e){}})(document.documentElement)</script>
+
+<title>Сверки — ANUPQ: проверка корректности</title>
+<meta name="description" content="Потомки против библиотеки SmallGroups, другие презентации, стандартные презентации.">
+<link rel="alternate" hreflang="en" href="https://ispacex.github.io/gap/checks.html">
+<link rel="alternate" hreflang="ru" href="https://ispacex.github.io/gap/ru/checks.html">
+<link rel="alternate" hreflang="x-default" href="https://ispacex.github.io/gap/checks.html">
+<link rel="canonical" href="https://ispacex.github.io/gap/ru/checks.html">
+<style>
+:root { --ink:#1f2933; --muted:#52606d; --line:#d9dee5; --bg:#ffffff; --soft:#f4f6f9;
+        --bad:#fde8e4; --badink:#a33a1f; --ok:#e7f4ea; --amb:#fff3d6; --acc:#2e6db4; --sel:rgba(46,109,180,.12);
+        --veil:rgba(15,20,30,.35); --imgpad:0; color-scheme:light; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink:#e6e9ee; --muted:#a3adb9; --line:#38414c; --bg:#14181d; --soft:#1c2128; --bad:#4a2620;
+        --badink:#ffb4a2; --ok:#1f3a27; --amb:#4a3d1c; --acc:#7fb0ec; --sel:rgba(127,176,236,.2);
+        --veil:rgba(0,0,0,.6); --imgpad:6px; color-scheme:dark; } }
+:root[data-theme="dark"] { --ink:#e6e9ee; --muted:#a3adb9; --line:#38414c; --bg:#14181d; --soft:#1c2128; --bad:#4a2620;
+        --badink:#ffb4a2; --ok:#1f3a27; --amb:#4a3d1c; --acc:#7fb0ec; --sel:rgba(127,176,236,.2);
+        --veil:rgba(0,0,0,.6); --imgpad:6px; color-scheme:dark; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 -apple-system, "Segoe UI", Roboto, "DejaVu Sans", sans-serif; }
+header { border-bottom:1px solid var(--line); background:var(--soft); }
+header .wrap { padding-top:.7rem; padding-bottom:.8rem; }
+header .top { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem 1rem; margin-bottom:.6rem; }
+header .title { font-weight:600; color:var(--ink); text-decoration:none; }
+header .tools { display:flex; align-items:center; gap:.6rem; margin-left:auto; }
+.lang { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; font-size:.85rem; line-height:1.6; }
+.lang a, .lang strong { padding:0 .6em; text-decoration:none; }
+.lang a { color:var(--acc); background:var(--bg); }
+.lang strong { background:var(--acc); color:var(--bg); }
+.lang > * + * { border-left:1px solid var(--line); }
+.theme { display:inline-flex; border:1px solid var(--line); border-radius:6px; overflow:hidden; font-size:.85rem; line-height:1.6; }
+.theme button { display:inline-flex; align-items:center; height:1.6em; margin:0; padding:0 .5em; border:0; border-radius:0;
+        background:var(--bg); color:var(--muted); font:inherit; cursor:pointer; }
+.theme button + button { border-left:1px solid var(--line); }
+.theme button:hover { color:var(--acc); }
+.theme button:focus-visible { outline:2px solid var(--acc); outline-offset:-2px; }
+.theme button[aria-pressed="true"] { background:var(--acc); color:var(--bg); }
+.theme svg { width:1em; height:1em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; }
+html:not(.js) .theme { display:none; }
+#nav-palette, #nav-open { --p-bg:var(--bg); --p-fg:var(--ink); --p-line:var(--line); --p-sel:var(--sel);
+        --p-mark:var(--acc); --p-veil:var(--veil); }
+nav { display:flex; flex-wrap:wrap; gap:.4rem; }
+nav a { color:var(--acc); text-decoration:none; white-space:nowrap; font-size:.92rem; line-height:1.5;
+        padding:.15em .65em; border:1px solid var(--line); border-radius:6px; background:var(--bg); }
+nav a:hover, nav a:focus-visible { border-color:var(--acc); }
+nav a.cur { background:var(--acc); border-color:var(--acc); color:var(--bg); font-weight:600; }
+@media (max-width:520px) { nav { gap:.3rem; } nav a { font-size:.85rem; padding:.1em .5em; } }
+.wrap { max-width:1100px; margin:0 auto; padding:.9rem 16px; }
+h1 { font-size:1.6rem; margin:.6rem 0 .8rem; } h2 { font-size:1.25rem; margin-top:2rem; } h3 { font-size:1.07rem; margin-top:1.7rem; }
+pre { overflow-x:auto; background:var(--soft); padding:.6rem .8rem; border-radius:6px; }
+pre code { padding:0; }
+main p, main li, td { overflow-wrap:break-word; }
+.added { margin:-.5rem 0 .5rem; font-size:.82rem; } .added a { color:var(--muted); }
+a { color:var(--acc); } .muted { color:var(--muted); } small { color:var(--muted); }
+.tw { overflow-x:auto; margin:1rem 0; border:1px solid var(--line); border-radius:6px;
+      position:relative; }  /* KaTeX's absolutely placed pieces are clipped too, not left sticking out of the page */
+table { border-collapse:collapse; width:100%; font-size:.9rem; font-variant-numeric:tabular-nums; }
+th, td { border-bottom:1px solid var(--line); padding:.3rem .55rem; text-align:center; vertical-align:top; }
+th { background:var(--soft); position:sticky; top:0; }
+td.l, th.l { text-align:left; }
+tr.bad td { background:var(--bad); } td.bad { background:var(--bad); color:var(--badink); font-weight:600; }
+td.amb { background:var(--amb); } td.ok { background:var(--ok); }
+.box { border-left:4px solid var(--acc); background:var(--soft); padding:.7rem 1rem; margin:1rem 0; border-radius:0 6px 6px 0; }
+img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:6px; background:#fff; padding:var(--imgpad); }
+code { background:var(--soft); padding:0 .25em; border-radius:3px; }
+footer { border-top:1px solid var(--line); margin-top:3rem; }
+</style><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+ onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script></head>
+<body><header><div class="wrap"><div class="top"><a class="title" href="index.html">ANUPQ: проверка корректности</a>
+<div class="tools"><span class="theme" role="group" aria-label="Тема"><button type="button" data-t="system" aria-pressed="true" aria-label="Тема: системная" title="Тема: системная"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button><button type="button" data-t="light" aria-pressed="false" aria-label="Тема: светлая" title="Тема: светлая"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button type="button" data-t="dark" aria-pressed="false" aria-label="Тема: тёмная" title="Тема: тёмная"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button></span><span class="lang" role="group" aria-label="Язык"><a href="../checks.html" hreflang="en" lang="en">EN</a><strong lang="ru" aria-current="true">RU</strong></span></div></div>
+<nav aria-label="Разделы"><a href="index.html">Сводка</a><a href="findings.html">Дефекты и исправления</a><a href="checks.html" class=cur aria-current=page>Сверки</a><a href="open.html">Открытые вопросы</a><a href="history.html">История</a><a href="data.html">Данные и скрипты</a></nav></div></header>
+<main class="wrap">
+<h1>Сверки</h1>
+
+<h2 id="smallgroups">Потомки против библиотеки SmallGroups</h2>
+<p>Для $p$-группы $H$ $p$-класса $c \ge 2$ её родитель в дереве — $H / P_c(H)$, а шаг равен $\log_p |P_c(H)|$.
+Поэтому для $G$ порядка $p^m$ и шага $s$ непосредственные потомки группы $G$ — это в точности группы $H$ порядка
+$p^{m+s}$ с $H / P_c(H) \cong G$. <code>desc_vs_sg.g</code> сравнивает для каждой группы $G$ библиотеки и каждого
+допустимого $s$ мультимножество <code>IdGroup</code> групп <code>PqDescendants(G : StepSize := s)</code> с этим
+множеством (элементарные абелевы группы ранга $\ge 5$ — только при $s = 1$: большие шаги там занимают часы).</p>
+<div class="tw"><table><tr><th>$p$</th><th>порядки $G$</th><th>пар $(G, s)$</th><th>расхождений</th></tr>
+<tr><td>2</td><td>$2 \dots 2^7$, потомки до $2^8$</td><td>3112</td><td class=ok>0</td></tr>
+<tr><td>3</td><td>$3 \dots 3^5$, до $3^6$</td><td>125</td><td class=ok>0</td></tr>
+<tr><td>5</td><td>до $5^5$</td><td>35</td><td class=ok>0</td></tr>
+<tr><td>7</td><td>до $7^4$</td><td>12</td><td class=ok>0</td></tr>
+<tr><td>11</td><td>до $11^4$</td><td>12</td><td class=ok>0</td></tr></table></div>
+<p>Это проверка <code>pq</code> на собственных презентациях библиотеки, которые совпадают с презентациями
+<code>pq</code>: <a href="findings.html#aut-basis">дефект 1</a> она увидеть не может. Часть шагов больше ядерного
+ранга группы $G$; для них пустой ответ верен, но, как показывает <a href="findings.html#interface-bookkeeping">дефект
+15</a>, <code>pq</code> приходит к нему через сбившийся диалог. Без <code>PcgsAutomorphisms</code>, как здесь, ответ
+получается верным.</p>
+
+<h2 id="copies">Потомки других презентаций той же группы</h2>
+<p>Потомки группы не могут зависеть от её презентации. <code>coords.g</code> сравнивает
+<code>PqDescendants(G : StepSize := 1)</code> для $G$ = <code>SmallGroup(n, k)</code> ($n$ = 32, 64, 128,
+$p$-класс $\ge 3$, каждое третье $k$) с тремя изоморфными копиями: специальный pcgs, pcgs перестановочного
+представления и собственная презентация <code>pq</code> для fp-группы. На master в этом прогоне первое расхождение
+появляется на порядке 128 (<code>SmallGroup(128, 3)</code>: 10 потомков, у копии 8), и до падения <code>pq</code> на
+<code>SmallGroup(128, 1728)</code> расходятся 17 групп; с <a href="findings.html#aut-basis">исправлением 1</a>:
+1983 сравнений в каждом из четырёх прогонов, 0 расхождений, в том числе под AddressSanitizer с тремя
+затравками. Фиксированный список копий из таблицы дефекта 1 (<code>gen_codes.g</code>,
+<code>check_codes.g</code>) — воспроизводимый вариант этой проверки.</p>
+
+<h2 id="sp">Стандартная презентация как ключ изоморфизма</h2>
+<p><code>spcheck.g</code>: для каждой группы данного порядка её стандартная презентация задаёт эту группу
+(<code>IdGroup</code> от <code>PcGroupFpGroup</code>), разные группы получают разные презентации, а копии в другой
+pc-презентации — ту же самую.</p>
+<div class="tw"><table><tr><th>порядок</th><th>групп</th><th>копий каждой</th><th>ошибок</th></tr>
+<tr><td>2</td><td>1</td><td>3</td><td class=ok>0</td></tr><tr><td>3</td><td>1</td><td>3</td><td class=ok>0</td></tr><tr><td>4</td><td>2</td><td>5</td><td class=ok>0</td></tr><tr><td>8</td><td>5</td><td>5</td><td class=ok>0</td></tr><tr><td>16</td><td>14</td><td>5</td><td class=ok>0</td></tr><tr><td>32</td><td>51</td><td>5</td><td class=ok>0</td></tr><tr><td>64</td><td>267</td><td>3</td><td class=ok>0</td></tr><tr><td>243</td><td>67</td><td>3</td><td class=ok>0</td></tr><tr><td>625</td><td>15</td><td>3</td><td class=ok>0</td></tr><tr><td>729</td><td>504</td><td>1</td><td class=ok>0</td></tr><tr><td>128</td><td>2328</td><td>1</td><td class=amb>идёт повторный прогон</td></tr></table></div>
+<p class=muted>Порядок 128: первый прогон оборвался, потому что <code>pq</code> был убит извне командой
+<code>pkill</code>, выполненной в ходе самого аудита (<a href="open.html#refuted">«Открытые вопросы»</a>); прогон
+повторяется на master и на <code>correctness</code>. Единственная смерть <code>pq</code> в прогоне порядка 64 имела
+ту же причину; порядок 64 пересчитан шесть раз (6408 вызовов) без единого сбоя.</p>
+
+<h2 id="dimension-subrings">Обход pq2048 с собственными накрытиями и детьми</h2>
+<p>С <code>PQ2048_OWNCOVER=1 PQ2048_OWNDESC=1</code> проект D₅ строит $p$-накрытия функцией GAP
+<code>Extension</code>, а детей с шагом 1 — как их pc-факторы, и вызывает <code>PqDescendants</code> для этих детей:
+это ровно входы дефекта 1. Для всех 304 вершин порядков 16–64 класса $\le 3$ их 1186 детей сравнены с копиями из
+SmallGroups (потомки по <code>IdGroup</code>, до порядка 256): на master 0 расхождений. Дальше мы не проверяли;
+исправление снимает вопрос.</p>
+
+<h2 id="asan">AddressSanitizer</h2>
+<p><code>pq</code>, собранный с <code>-fsanitize=address</code>, прогнан с исправлениями на копиях выше и на проверке
+стандартных презентаций порядка 64: отчётов нет. На master падение из дефекта 1 — это <code>heap-buffer-overflow</code> в
+<code>stabiliser_generators</code> (<code>stabiliser.c:173</code>): с отображениями, которые не являются
+автоморфизмами, слово Шрайера не замыкается, и цикл пишет за конец рабочей памяти, которого никогда не проверяет
+(<a href="findings.html#stabiliser-space">дефект 21</a>). Во втором проходе ASan показал переполнения кучи из
+дефектов <a href="findings.html#exponent-queue">12</a> и 21 на master и ничего — с их исправлениями; то, что видит
+только ASan при крошечной рабочей памяти, — на странице <a href="open.html">«Открытые вопросы»</a>. Падение из
+дефекта 4 отчёта не оставляет: <code>pq</code> завершается на входе, который ему не подходит.</p>
+
+</main><footer><div class="wrap"><small>Проверка пакета GAP ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master 81bcf35), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. Исправления: PR #96–#117; все вместе — ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a>, коммит 23541ab. Состояние на 18 октября 2026 г..</small></div></footer>
+<script>(function(){var d=document.documentElement,K='gap-theme',
+b=document.querySelectorAll('.theme button');
+function show(){var t=d.getAttribute('data-theme')||'system';
+for(var i=0;i<b.length;i++)b[i].setAttribute('aria-pressed',b[i].getAttribute('data-t')===t?'true':'false')}
+function set(t){if(t==='light'||t==='dark')d.setAttribute('data-theme',t);else{t='system';d.removeAttribute('data-theme')}show();return t}
+for(var i=0;i<b.length;i++)b[i].addEventListener('click',function(){var t=set(this.getAttribute('data-t'));
+try{if(t==='system')localStorage.removeItem(K);else localStorage.setItem(K,t)}catch(e){}});
+addEventListener('storage',function(e){if(e.key===K)set(e.newValue)});show()})()</script>
+
+</body></html>

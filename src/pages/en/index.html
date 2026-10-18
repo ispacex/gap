@@ -1,0 +1,73 @@
+<h1>ANUPQ: a correctness audit</h1>
+
+<p>We use ANUPQ (<code>PqDescendants</code>, <code>PqPCover</code>, <code>PqStandardPresentation</code>) to walk
+the 2-group generation tree to order $2^{11}$, where a missed or a spurious descendant would silently change a
+mathematical result. The maintainers have said that they care for correct computations; so do we. This is what
+we checked, what we found, and the fixes we propose, each with a reproducer, an argument for why the fix is
+right, and the evidence.</p>
+
+<div class="box"><b>In short.</b> 24 defects, each with a reproducer; 22 are fixed in pull requests #96–#117, and
+the fixes of the other two are prepared.
+<ul>
+<li><b>First pass</b> (#96–#104, nine defects): two give <b>wrong descendants silently</b> (one of them also
+crashes <code>pq</code>), one gives a wrong isomorphism, one more crashes <code>pq</code>, one hangs, and four are
+errors or wrong data on less used paths. The two silent errors are reached only off the default path: a pc
+presentation other than <code>pq</code>'s own, or 127 or more automorphisms.</li>
+<li><b>Second pass</b> (#105–#117 and two fixes prepared, fifteen defects): we checked each of the 15 suspected defects that were left
+open: thirteen are confirmed and two refuted. Three more turned up on the way; two are
+fixed here, the third is harmless and left open. Ten of the fifteen can give a <b>wrong result without any message</b>, but <b>none of them is reached
+by 2-group generation with default options</b>: they need the option <code>PcgsAutomorphisms</code>,
+automorphisms supplied by hand together with an exponent law, a prime $p \ge 2^{15}$ or $p^d &gt; 10000$, a pc
+group that is not a $p$-group, a <code>pQuotient</code> of class 2 or more in another pc presentation, more than 65535 pc generators, or a workspace near its limit.</li>
+</ul>
+Against the SmallGroups library, <code>PqDescendants</code> on the library's own groups is right everywhere we
+looked ({{sg_pairs}} pairs (group, step size), $p = 2, 3, 5, 7, 11$), and standard presentations are invariant
+and separating on {{sp_groups}} groups.</div>
+
+<h2>Findings</h2>
+{{findings_table}}
+<p class=muted>Red: a wrong mathematical result or a crash. Amber: an error, a hang or wrong auxiliary data; no
+wrong group is returned. What is still open, and what we checked and refuted, is on
+<a href="open.html">Open items</a>.</p>
+
+<h2>All fixes together</h2>
+<p>The branch <a href="{{fork}}/tree/correctness"><code>correctness</code></a> of ispacex/anupq, at
+<a href="{{fork}}/commit/{{correctness}}"><code>{{correctness}}</code></a>, is master {{master}} with all fixes
+#96–#117 merged; the package test suite passes on it ({{testall_files}} test files, 0 failures). The fixes of
+findings 15 and 19 are not in it yet.</p>
+
+<h2>How we checked</h2>
+<ol>
+<li><b>Reading.</b> The C core (p-quotient and p-cover, collection, consistency, echelon), p-group generation
+(allowable subgroups, labels, orbits, stabilisers, automorphisms), standard presentations, and the GAP interface,
+with an eye on boundary cases: $p = 2$ and large $p$, rank 1, class 1, nucleus of rank 0, step size larger than
+the nucleus, many generators, many automorphisms, interactive and non-interactive use.</li>
+<li><b>Differential checks against independent data</b> (<a href="checks.html">details</a>): descendants against
+the SmallGroups library, the same group in other pc presentations, standard presentations as an isomorphism
+invariant, <code>pq</code> under AddressSanitizer.</li>
+<li><b>Every suspicion</b> read in the code was then reproduced or refuted on master and on the branch with the
+earlier fixes; for each confirmed one we state whether it can give a wrong result without a message and whether
+our own runs can reach it.</li>
+<li><b>Every fix</b> comes with a test that fails before and passes after (except where the input no longer
+reaches the code after an earlier fix, as for finding 21), and the package test suite passes with each fix and
+with all of them together.</li>
+</ol>
+
+<h2>Found correct</h2>
+<ul>
+<li><code>PqDescendants</code> on SmallGroups: for every group $G$ of order $p^m$ and every step size $s$ with
+$p^{m+s}$ in range, the descendants are exactly the groups $H$ of order $p^{m+s}$ with $H/P_c(H) \cong G$
+(as multisets of <code>IdGroup</code>): $p = 2$ to order $2^8$, $p = 3$ to $3^6$, $p = 5$ to $5^5$,
+$p = 7, 11$ to $p^4$; {{sg_pairs}} pairs, 0 differences.</li>
+<li><code>PqStandardPresentation</code> as an isomorphism key: all groups of orders {{sp_orders}} get pairwise
+different standard presentations, each is a presentation of its group, and isomorphic copies in other pc
+presentations get the same one ({{sp_groups}} groups, 0 failures; order 128 is being rerun).</li>
+<li>The collectors for $p = 2$ and odd $p$, consistency and tails, echelonisation, label/subgroup conversion,
+the allowability test $U + N = M$, the central automorphisms, the insoluble orbit algorithm, and the
+permutation representation of $A/S$ handed to AutPGrp (PR #85): read and found right.</li>
+</ul>
+
+<h2>Environment</h2>
+<p>GAP 4.16.1, AutPGrp 1.13.0, ANUPQ master {{master}} (with GMP), macOS 26 on arm64 (Apple clang); the checks
+of the fixes were repeated with <code>pq</code> built with <code>-fsanitize=address</code>. Everything needed to
+repeat them is on <a href="data.html">Data and scripts</a>.</p>
