@@ -61,7 +61,7 @@ UI = {
         "footer": 'An audit of the GAP package ANUPQ (<a href="{repo}">gap-packages/anupq</a>, master at '
                   '{master}) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">'
                   'ispacex/dimension-subrings</a>), which relies on ANUPQ for p-group generation. Fixes: '
-                  'pull requests #96–#117; all of them together: branch <a href="{fork}/tree/correctness">'
+                  'pull requests #96–#121; all of them together: branch <a href="{fork}/tree/correctness">'
                   '<code>correctness</code></a> at {correctness}. As of {date}.<br>'
                   'Part of <a href="https://ispacex.github.io/math/">Mathematics</a> at ispacex.github.io.',
     },
@@ -82,7 +82,7 @@ UI = {
         "footer": 'Проверка пакета GAP ANUPQ (<a href="{repo}">gap-packages/anupq</a>, master '
                   '{master}), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">'
                   'ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. '
-                  'Исправления: PR #96–#117; все вместе — ветка <a href="{fork}/tree/correctness">'
+                  'Исправления: PR #96–#121; все вместе — ветка <a href="{fork}/tree/correctness">'
                   '<code>correctness</code></a>, коммит {correctness}. Состояние на {date}.<br>'
                   'Раздел <a href="https://ispacex.github.io/ru/math/">«Математика»</a> на ispacex.github.io.',
     },
@@ -108,10 +108,16 @@ def num(lang, x):
     return s.replace(".", ",") if lang == "ru" else s
 
 
-def pr(key, lang):
+def prs(key):
+    """the pull requests of a fix, as a list (a fix may be split into several)"""
     n = N.get("pr_" + key)
-    if n:
-        return f'<a href="{REPO}/pull/{n}">#{n}</a>'
+    return n if isinstance(n, list) else [n] if n else []
+
+
+def pr(key, lang):
+    ns = prs(key)
+    if ns:
+        return ", ".join(f'<a href="{REPO}/pull/{n}">#{n}</a>' for n in ns)
     if N.get("prepared_" + key):
         return UI[lang]["prepared"]
     b = N["branch_" + key]
@@ -233,10 +239,12 @@ def history_findings(lang):
         if "anchor" not in r:
             continue
         eid, d = a[r["anchor"]]
-        n = N.get("pr_" + r["fix"])
-        if n:
-            st = H["pr_states"].get(str(n), "open")
-            fix, opened, state = prlink(n), dmy(H["pr_created"][str(n)]), T["states"].get(st, st)
+        ns = prs(r["fix"])
+        if ns:
+            sts = [H["pr_states"].get(str(n), "open") for n in ns]
+            st = "closed" if "closed" in sts else "merged" if all(x == "merged" for x in sts) else "open"
+            fix = ", ".join(prlink(n) for n in ns)
+            opened, state = dmy(min(H["pr_created"][str(n)] for n in ns)), T["states"].get(st, st)
             cls = {"merged": "ok", "closed": "bad"}.get(st, "")
         else:
             fix, opened, state, cls = T["prepared"], "—", "—", "amb"
@@ -260,8 +268,11 @@ FIX_OF = {r["anchor"]: r["fix"] for r in facts.FINDINGS if "anchor" in r}
 
 
 def test_link(fix):
-    n, name = N.get("pr_" + fix), facts.TESTS.get(fix)
-    return f'<a href="{REPO}/pull/{n}/files"><code>tst/{name}</code></a>' if n and name else ""
+    ns, names = prs(fix), facts.TESTS.get(fix)
+    if not ns or not names:
+        return ""
+    names = names if isinstance(names, list) else [names]
+    return "<br>".join(f'<a href="{REPO}/pull/{n}/files"><code>tst/{t}</code></a>' for n, t in zip(ns, names))
 
 
 def data_table(lang, depth):
@@ -325,7 +336,7 @@ def refresh_pr_states():
                           "--json", "number,createdAt,state"], check=True, capture_output=True, text=True).stdout
     for p in json.loads(out):
         k = str(p["number"])
-        if k in H["pr_states"]:
+        if k in H["pr_states"] or p["number"] >= 96:
             H["pr_states"][k] = p["state"].lower()
             H["pr_created"][k] = p["createdAt"][:10]
     H["pr_states_as_of"] = datetime.datetime.now(datetime.timezone.utc).date().isoformat()

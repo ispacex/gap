@@ -347,6 +347,43 @@
     "en": "Site: second-pass findings 10–24, Open items reduced to two documented risks and a refuted list, Russian version, this history page.",
     "ru": "Сайт: дефекты второго прохода 10–24, «Открытые вопросы» сведены к двум известным рискам и списку опровергнутого, русская версия, эта страница истории."
    }
+  },
+  {
+   "date": "2026-10-18",
+   "time": "11:18",
+   "kind": "pr",
+   "pr": 118,
+   "finding": "sp-pquotient"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "11:44",
+   "kind": "pr",
+   "pr": 119,
+   "finding": "interface-bookkeeping"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "11:44",
+   "kind": "pr",
+   "pr": 120,
+   "finding": "interface-bookkeeping"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "11:44",
+   "kind": "pr",
+   "pr": 121,
+   "finding": "interface-bookkeeping"
+  },
+  {
+   "date": "2026-10-18",
+   "time": "12:10",
+   "kind": "text",
+   "text": {
+    "en": "Branch <code>correctness</code> of ispacex/anupq fast-forwarded to cdce1dc: master with all fixes #96–#121; 123 test files pass.",
+    "ru": "Ветка <code>correctness</code> репозитория ispacex/anupq продвинута до cdce1dc: master со всеми исправлениями #96–#121; проходят 123 файла тестов."
+   }
   }
  ],
  "pr_created": {
@@ -371,7 +408,11 @@
   "114": "2026-10-18",
   "115": "2026-10-18",
   "116": "2026-10-18",
-  "117": "2026-10-18"
+  "117": "2026-10-18",
+  "121": "2026-10-18",
+  "120": "2026-10-18",
+  "119": "2026-10-18",
+  "118": "2026-10-18"
  },
  "pr_states": {
   "96": "open",
@@ -395,7 +436,11 @@
   "114": "open",
   "115": "open",
   "116": "open",
-  "117": "open"
+  "117": "open",
+  "121": "open",
+  "120": "open",
+  "119": "open",
+  "118": "open"
  },
  "pr_states_as_of": "2026-10-18"
 }

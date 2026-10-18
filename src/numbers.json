@@ -4,7 +4,7 @@
  "sg_pairs": "3296",
  "sp_groups": "927",
  "sp_orders": "2, 3, 4, 8, 16, 32, 64, 243, 625, 729",
- "testall_files": "119",
+ "testall_files": "123",
  "coords_total": "1983",
  "timing_old": "28.6",
  "timing_new": "29.3",
@@ -31,7 +31,7 @@
  "pr_savepqlist": 102,
  "pr_relative_orders": 103,
  "pr_isomorphic_trivial": 104,
- "correctness": "23541ab",
+ "correctness": "cdce1dc",
  "sp_table": [
   [
    2,
@@ -114,6 +114,10 @@
  "pr_stabiliser_relative": 115,
  "pr_prime_bound": 116,
  "pr_gl_order": 117,
- "prepared_interface_bookkeeping": true,
- "prepared_sp_pquotient": true
+ "pr_sp_pquotient": 118,
+ "pr_interface_bookkeeping": [
+  119,
+  120,
+  121
+ ]
 }

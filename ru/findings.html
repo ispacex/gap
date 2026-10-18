@@ -363,7 +363,7 @@ $S_4 \times C_3$ не завершилась, объясняется не зав
 fp-группы идут другими ветками.</p>
 
 <h3 id="interface-bookkeeping">15. Шаг больше ядерного ранга и ещё две ошибки учёта</h3>
-<p class="added"><a href="history.html#e-verdict-MATH-160">добавлен 18.10.2026</a> · данные: <a href="data.html#d-interface-bookkeeping"><code>step_size.g</code></a></p>
+<p class="added"><a href="history.html#e-verdict-MATH-160">добавлен 18.10.2026</a> · данные: <a href="data.html#d-interface-bookkeeping"><code>step_size.g</code></a> · тест в PR: <a href="https://github.com/gap-packages/anupq/pull/119/files"><code>tst/step_size_dialogue.tst</code></a><br><a href="https://github.com/gap-packages/anupq/pull/120/files"><code>tst/group_name.tst</code></a><br><a href="https://github.com/gap-packages/anupq/pull/121/files"><code>tst/sp_tmpdir.tst</code></a></p>
 <p><b>Суть.</b> Три ошибки учёта в интерфейсе GAP; первая может дать неверных потомков.</p>
 <p>(a) <b>Шаг больше ядерного ранга.</b> Под GAP <code>pq</code> снова спрашивает шаг, если он больше ядерного
 ранга (<code>src/defaults_pga.c:283</code>), но GAP уже отправил следующие ответы, и они читаются как шаг, пока
@@ -378,7 +378,7 @@ PqDescendants(G : StepSize := 4);                        # [ ]: верно, но
 <code>Name(G)</code>) приводит к ошибке в <code>PqDescendants</code>: класс извлекается из имени файла
 <code>my_G_class2</code> разбиением по <code>_</code> (<code>lib/anupqi.gi:2975</code>); с пробелом интерактивный
 <code>PqPGSetDescendantToPcp</code> убивает <code>pq</code>.</p>
-<p><b>Исправление</b> (исправление готово, PR готовится): под GAP <code>pq</code> принимает шаг и возвращает
+<p><b>Исправление</b> (<a href="https://github.com/gap-packages/anupq/pull/119">#119</a>, <a href="https://github.com/gap-packages/anupq/pull/120">#120</a>, <a href="https://github.com/gap-packages/anupq/pull/121">#121</a>): под GAP <code>pq</code> принимает шаг и возвращает
 пустой список потомков, как уже делает при вводе из файла; <code>ANUPQDirectoryTemporary</code> обновляет
 <code>SPimages</code>; класс берётся из цифр в конце имени файла, а пробельные символы в <code>GroupName</code>
 заменяются на <code>_</code>. С ним три воспроизведения дают <code>[ ]</code>, группу и 6 потомков.</p>
@@ -440,7 +440,7 @@ Pq(G : Prime := 2, ClassBound := 3, PqWorkspace := 210);                        
 умолчанию $10^7$ слов), заполненная почти до конца, с запасом меньше примерно $4 \cdot \mathrm{lastg}$ слов.</p>
 
 <h3 id="sp-pquotient">19. <code>StandardPresentation</code> с <code>pQuotient</code> в другой pc-презентации</h3>
-<p class="added"><a href="history.html#e-verdict-MATH-159">добавлен 18.10.2026</a> · данные: <a href="data.html#d-sp-pquotient"><code>sp_pquotient.g</code></a></p>
+<p class="added"><a href="history.html#e-verdict-MATH-159">добавлен 18.10.2026</a> · данные: <a href="data.html#d-sp-pquotient"><code>sp_pquotient.g</code></a> · тест в PR: <a href="https://github.com/gap-packages/anupq/pull/118/files"><code>tst/sp_pquotient_basis.tst</code></a></p>
 <p><b>Суть.</b> С опцией <code>pQuotient := Q</code> автоморфизмы группы $Q$ передаются в <code>pq</code>
 показателями относительно <code>PcgsPCentralSeriesPGroup(Q)</code>, но саму $Q$ <code>pq</code> не получает: он
 строит собственную pcp фактора класса $c - 1$ и читает показатели в этом базисе. Там, где базисы различаются,
@@ -461,7 +461,7 @@ StandardPresentation(H : pQuotient := PcGroupCode(2768831001, 32), ClassBound :=
 группа SmallGroups с тем же номером, расхождений нет ни на одной сборке.</p>
 <p><b>Причина.</b> <code>PQ_SP_STANDARD_PRESENTATION</code> (<code>lib/anupqi.gi:2418</code>) вызывает
 <code>PQ_AUT_INPUT(datarec, datarec.pQuotient)</code>, а сама $Q$ в <code>pq</code> не передаётся.</p>
-<p><b>Исправление</b> (исправление готово, PR готовится). Перед отправкой автоморфизмов GAP запрашивает у <code>pq</code> его
+<p><b>Исправление</b> (<a href="https://github.com/gap-packages/anupq/pull/118">#118</a>). Перед отправкой автоморфизмов GAP запрашивает у <code>pq</code> его
 текущую pcp, как в дефекте 1, и берёт фактор $p$-накрытия по последним порождающим — это группа <code>pq</code> в
 его собственной pcp; автоморфизмы вычисляются для неё. Если её порядок не равен $|Q|$, вызов завершается ошибкой.
 Даже при верном базисе <code>pQuotient</code> класса не меньше 2 не даёт канонической стандартной презентации: по
@@ -562,7 +562,7 @@ $\alpha_t$ возрастает; поэтому разрешимые — те, �
 <p><b>Без сообщения?</b> Только неверные данные. <b>Построение 2-групп по умолчанию:</b> не затронуто.</p>
 
 </div><aside class="toc" aria-label="На этой странице"><p>На этой странице</p><ol><li class="l2"><a href="#first-pass">Первый проход</a></li><li class="l3"><a href="#aut-basis">1. Автоморфизмы передаются в pq в чужом базисе</a></li><li class="l3"><a href="#char-counters">2. Счётчики орбит в char</a></li><li class="l3"><a href="#sp-epimorphism">3. EpimorphismStandardPresentation для pc-групп не изоморфизм</a></li><li class="l3"><a href="#descendants-law">4. Группа, нарушающая заданный закон экспоненты, роняет pq</a></li><li class="l3"><a href="#sp-relators">5. PqStandardPresentation зависает при Relators другого ранга</a></li><li class="l3"><a href="#stale-descendants">6. Интерактивный PqDescendants возвращает группы прежних команд</a></li><li class="l3"><a href="#savepqlist">7. SavePqList пишет файлы, которые PqList не может прочитать</a></li><li class="l3"><a href="#relative-orders">8. Опция RelativeOrders</a></li><li class="l3"><a href="#isomorphic-trivial">9. IsIsomorphicPGroup для двух тривиальных групп</a></li><li class="l2"><a href="#silent">Второй проход: неверный результат без сообщения</a></li><li class="l3"><a href="#pcgs-automorphisms">10. PcgsAutomorphisms с последовательностью, не являющейся PAG</a></li><li class="l3"><a href="#exponent-reduced-list">11. Закон экспоненты при автоморфизмах, заданных вручную</a></li><li class="l3"><a href="#exponent-queue">12. Очередь закона экспоненты не увеличивается в классе 2</a></li><li class="l3"><a href="#gl-order">13. glOrder неверен при $p^d &gt; 10000$</a></li><li class="l3"><a href="#epimorphism-non-pgroup">14. PqEpimorphism для pc-группы, не являющейся $p$-группой</a></li><li class="l3"><a href="#interface-bookkeeping">15. Шаг больше ядерного ранга и ещё две ошибки учёта</a></li><li class="l3"><a href="#prime-bound">16. Простые $p \ge 2^{15}$</a></li><li class="l3"><a href="#pc-generator-limit">17. Больше 65535 pc-порождающих в одном классе</a></li><li class="l3"><a href="#commutator-workspace">18. Для коммутаторного соотношения с показателем резервируется мало памяти</a></li><li class="l3"><a href="#sp-pquotient">19. StandardPresentation с pQuotient в другой pc-презентации</a></li><li class="l2"><a href="#crashes">Второй проход: падения и ошибки</a></li><li class="l3"><a href="#gmp-separator">20. Файлы сохранённых групп при сборке с GMP</a></li><li class="l3"><a href="#stabiliser-space">21. Слова Шрайера пишутся без проверки места</a></li><li class="l3"><a href="#degree-overflow">22. Переполнение числа допустимых подгрупп</a></li><li class="l2"><a href="#data">Второй проход: неверные данные</a></li><li class="l3"><a href="#gap-relorders">23. В относительных порядках для GAP повторяется последний</a></li><li class="l3"><a href="#stabiliser-relative">24. Относительные порядки разрешимого стабилизатора не пересчитываются</a></li></ol></aside>
-</main><footer><div class="wrap"><small>Проверка пакета GAP ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master 81bcf35), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. Исправления: PR #96–#117; все вместе — ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a>, коммит 23541ab. Состояние на 18 октября 2026 г..<br>Раздел <a href="https://ispacex.github.io/ru/math/">«Математика»</a> на ispacex.github.io.</small></div></footer>
+</main><footer><div class="wrap"><small>Проверка пакета GAP ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master 81bcf35), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. Исправления: PR #96–#121; все вместе — ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a>, коммит cdce1dc. Состояние на 18 октября 2026 г..<br>Раздел <a href="https://ispacex.github.io/ru/math/">«Математика»</a> на ispacex.github.io.</small></div></footer>
 <script>(function(){var d=document.documentElement,K='gap-theme',
 b=document.querySelectorAll('.theme button');
 function show(){var t=d.getAttribute('data-theme')||'system';

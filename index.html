@@ -102,14 +102,13 @@ mathematical result. The maintainers have said that they care for correct comput
 we checked, what we found, and the fixes we propose, each with a reproducer, an argument for why the fix is
 right, and the evidence.</p>
 
-<div class="box"><b>In short.</b> 24 defects, each with a reproducer; 22 are fixed in pull requests #96–#117, and
-the fixes of the other two are prepared.
+<div class="box"><b>In short.</b> 24 defects, each with a reproducer, all fixed in pull requests #96–#121.
 <ul>
 <li><b>First pass</b> (#96–#104, nine defects): two give <b>wrong descendants silently</b> (one of them also
 crashes <code>pq</code>), one gives a wrong isomorphism, one more crashes <code>pq</code>, one hangs, and four are
 errors or wrong data on less used paths. The two silent errors are reached only off the default path: a pc
 presentation other than <code>pq</code>'s own, or 127 or more automorphisms.</li>
-<li><b>Second pass</b> (#105–#117 and two fixes prepared, fifteen defects): we checked each of the 15 suspected defects that were left
+<li><b>Second pass</b> (#105–#121, fifteen defects): we checked each of the 15 suspected defects that were left
 open: thirteen are confirmed and two refuted. Three more turned up on the way; two are
 fixed here, the third is harmless and left open. Ten of the fifteen can give a <b>wrong result without any message</b>, but <b>none of them is reached
 by 2-group generation with default options</b>: they need the option <code>PcgsAutomorphisms</code>,
@@ -139,11 +138,11 @@ and separating on 927 groups.</div>
 <tr><td class=l><a href="findings.html#exponent-queue">Exponent-law queue at class 2</a></td><td class="l bad">wrong groups or pq crash (heap overflow)</td><td class=l><code>PqSupplyAutomorphisms</code> generating $GL(d,2)$, $d \ge 7$, with <code>Exponent := 2</code>: e.g. $2^{11}$ instead of $2^7$ in 6 of 10 runs</td><td><a href="https://github.com/gap-packages/anupq/pull/106">#106</a></td></tr>
 <tr><td class=l><a href="findings.html#gl-order"><code>glOrder</code> for $p^d &gt; 10000$</a></td><td class="l bad">wrong stabilisers handed to pq</td><td class=l><code>PqDescendants</code> of a group of rank $d$ with $p^d &gt; 10000$, e.g. $(C_{101})^2$: <code>glOrder</code> 1020000/1030301 instead of 1030200</td><td><a href="https://github.com/gap-packages/anupq/pull/117">#117</a></td></tr>
 <tr><td class=l><a href="findings.html#epimorphism-non-pgroup"><code>PqEpimorphism</code> for a pc group that is not a $p$-group</a></td><td class="l bad">map not a homomorphism, or error</td><td class=l>generators other than the pcgs, e.g. those of a pc group $S_3 \times C_4$ in reverse order</td><td><a href="https://github.com/gap-packages/anupq/pull/111">#111</a></td></tr>
-<tr><td class=l><a href="findings.html#interface-bookkeeping"><code>StepSize</code> above the nuclear rank; temporary directory; group names</a></td><td class="l bad">wrong descendants with <code>PcgsAutomorphisms</code>; otherwise errors</td><td class=l><code>PqDescendants(SmallGroup(4,2) : StepSize := 4, PcgsAutomorphisms)</code>: 3 groups instead of none; <code>ANUPQDirectoryTemporary</code>; a group name with <code>_</code></td><td>fix prepared, pull request to come</td></tr>
+<tr><td class=l><a href="findings.html#interface-bookkeeping"><code>StepSize</code> above the nuclear rank; temporary directory; group names</a></td><td class="l bad">wrong descendants with <code>PcgsAutomorphisms</code>; otherwise errors</td><td class=l><code>PqDescendants(SmallGroup(4,2) : StepSize := 4, PcgsAutomorphisms)</code>: 3 groups instead of none; <code>ANUPQDirectoryTemporary</code>; a group name with <code>_</code></td><td><a href="https://github.com/gap-packages/anupq/pull/119">#119</a>, <a href="https://github.com/gap-packages/anupq/pull/120">#120</a>, <a href="https://github.com/gap-packages/anupq/pull/121">#121</a></td></tr>
 <tr><td class=l><a href="findings.html#prime-bound">Primes $p \ge 2^{15}$</a></td><td class="l bad">wrong epimorphism or $p$-cover</td><td class=l><code>PqEpimorphism(G : Prime := 32771, ClassBound := 1)</code>: a relation of $G$ fails in the image</td><td><a href="https://github.com/gap-packages/anupq/pull/116">#116</a></td></tr>
 <tr><td class=l><a href="findings.html#pc-generator-limit">More than 65535 pc generators in one class</a></td><td class="l bad">corrupted presentation</td><td class=l><code>PqNextClass</code> for <code>FreeGroup(361)</code>, $p = 2$, from class 1 to class 2</td><td><a href="https://github.com/gap-packages/anupq/pull/114">#114</a></td></tr>
 <tr><td class=l><a href="findings.html#commutator-workspace">Workspace for a commutator relation with an exponent</a></td><td class="l bad">wrong order</td><td class=l><code>Relators := ["[b,a]^3"]</code> with <code>PqWorkspace</code> near its limit: $2^7$ instead of $2^6$</td><td><a href="https://github.com/gap-packages/anupq/pull/109">#109</a></td></tr>
-<tr><td class=l><a href="findings.html#sp-pquotient"><code>StandardPresentation</code> with a <code>pQuotient</code> in another pc presentation</a></td><td class="l bad">wrong standard presentation; pq crash</td><td class=l><code>pQuotient := Q</code> of class at least 2 whose pcgs is not pq's: order 64, 354 copies, 59 wrong, 109 crashes</td><td>fix prepared, pull request to come</td></tr>
+<tr><td class=l><a href="findings.html#sp-pquotient"><code>StandardPresentation</code> with a <code>pQuotient</code> in another pc presentation</a></td><td class="l bad">wrong standard presentation; pq crash</td><td class=l><code>pQuotient := Q</code> of class at least 2 whose pcgs is not pq's: order 64, 354 copies, 59 wrong, 109 crashes</td><td><a href="https://github.com/gap-packages/anupq/pull/118">#118</a></td></tr>
 <tr><th class=l colspan=4>Second pass, crashes and errors</th></tr>
 <tr><td class=l><a href="findings.html#gmp-separator">Saved group files with GMP</a></td><td class="l bad">pq crash</td><td class=l><code>PqDescendants(CyclicGroup(53))</code>; every $p$ with $p \bmod 256 \in [48, 57]$ (53, 307, 311, …)</td><td><a href="https://github.com/gap-packages/anupq/pull/105">#105</a></td></tr>
 <tr><td class=l><a href="findings.html#stabiliser-space">Schreier words without a space check</a></td><td class="l bad">memory overwrite; pq crash</td><td class=l>on master only through finding 1, e.g. a copy of <code>SmallGroup(256,1325)</code></td><td><a href="https://github.com/gap-packages/anupq/pull/108">#108</a></td></tr>
@@ -158,9 +157,8 @@ wrong group is returned. What is still open, and what we checked and refuted, is
 
 <h2>All fixes together</h2>
 <p>The branch <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a> of ispacex/anupq, at
-<a href="https://github.com/ispacex/anupq/commit/23541ab"><code>23541ab</code></a>, is master 81bcf35 with all fixes
-#96–#117 merged; the package test suite passes on it (119 test files, 0 failures). The fixes of
-findings 15 and 19 are not in it yet.</p>
+<a href="https://github.com/ispacex/anupq/commit/cdce1dc"><code>cdce1dc</code></a>, is master 81bcf35 with all fixes
+#96–#121 merged; the package test suite passes on it (123 test files, 0 failures).</p>
 
 <h2>How we checked</h2>
 <ol>
@@ -199,7 +197,7 @@ of the fixes were repeated with <code>pq</code> built with <code>-fsanitize=addr
 repeat them is on <a href="data.html">Data and scripts</a>.</p>
 
 </div>
-</main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), which relies on ANUPQ for p-group generation. Fixes: pull requests #96–#117; all of them together: branch <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a> at 23541ab. As of 18 October 2026.<br>Part of <a href="https://ispacex.github.io/math/">Mathematics</a> at ispacex.github.io.</small></div></footer>
+</main><footer><div class="wrap"><small>An audit of the GAP package ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master at 81bcf35) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), which relies on ANUPQ for p-group generation. Fixes: pull requests #96–#121; all of them together: branch <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a> at cdce1dc. As of 18 October 2026.<br>Part of <a href="https://ispacex.github.io/math/">Mathematics</a> at ispacex.github.io.</small></div></footer>
 <script>(function(){var d=document.documentElement,K='gap-theme',
 b=document.querySelectorAll('.theme button');
 function show(){var t=d.getAttribute('data-theme')||'system';

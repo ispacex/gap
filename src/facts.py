@@ -250,6 +250,8 @@ TESTS = {
     "exponent_reduced_list": "exponent_reduced_list.tst", "degree_overflow": "degree_overflow.tst",
     "pc_generator_limit": "pc_generator_limit.tst", "stabiliser_relative": "stabiliser_relative.tst",
     "prime_bound": "prime_bound.tst", "gl_order": "gl_order.tst",
+    "sp_pquotient": "sp_pquotient_basis.tst",
+    "interface_bookkeeping": ["step_size_dialogue.tst", "group_name.tst", "sp_tmpdir.tst"],
 }
 
 # Files in data/: which findings (anchors) or other items they support. "page" links a non-finding target.

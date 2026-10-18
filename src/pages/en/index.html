@@ -6,14 +6,13 @@ mathematical result. The maintainers have said that they care for correct comput
 we checked, what we found, and the fixes we propose, each with a reproducer, an argument for why the fix is
 right, and the evidence.</p>
 
-<div class="box"><b>In short.</b> 24 defects, each with a reproducer; 22 are fixed in pull requests #96–#117, and
-the fixes of the other two are prepared.
+<div class="box"><b>In short.</b> 24 defects, each with a reproducer, all fixed in pull requests #96–#121.
 <ul>
 <li><b>First pass</b> (#96–#104, nine defects): two give <b>wrong descendants silently</b> (one of them also
 crashes <code>pq</code>), one gives a wrong isomorphism, one more crashes <code>pq</code>, one hangs, and four are
 errors or wrong data on less used paths. The two silent errors are reached only off the default path: a pc
 presentation other than <code>pq</code>'s own, or 127 or more automorphisms.</li>
-<li><b>Second pass</b> (#105–#117 and two fixes prepared, fifteen defects): we checked each of the 15 suspected defects that were left
+<li><b>Second pass</b> (#105–#121, fifteen defects): we checked each of the 15 suspected defects that were left
 open: thirteen are confirmed and two refuted. Three more turned up on the way; two are
 fixed here, the third is harmless and left open. Ten of the fifteen can give a <b>wrong result without any message</b>, but <b>none of them is reached
 by 2-group generation with default options</b>: they need the option <code>PcgsAutomorphisms</code>,
@@ -33,8 +32,7 @@ wrong group is returned. What is still open, and what we checked and refuted, is
 <h2>All fixes together</h2>
 <p>The branch <a href="{{fork}}/tree/correctness"><code>correctness</code></a> of ispacex/anupq, at
 <a href="{{fork}}/commit/{{correctness}}"><code>{{correctness}}</code></a>, is master {{master}} with all fixes
-#96–#117 merged; the package test suite passes on it ({{testall_files}} test files, 0 failures). The fixes of
-findings 15 and 19 are not in it yet.</p>
+#96–#121 merged; the package test suite passes on it ({{testall_files}} test files, 0 failures).</p>
 
 <h2>How we checked</h2>
 <ol>
