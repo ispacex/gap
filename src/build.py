@@ -14,7 +14,7 @@ One source of facts for both languages:
   partials/      style and theme script, shared.
 English pages go to OUTDIR, Russian ones to OUTDIR/ru.
 """
-import datetime, html, json, os, sys
+import datetime, html, json, os, shutil, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
@@ -476,6 +476,15 @@ def page(lang, fname):
 {THEME_HEAD}
 <title>{html.escape(title)}</title>
 <meta name="description" content="{html.escape(u["desc"][fname])}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{html.escape(u["site"])}">
+<meta property="og:title" content="{html.escape(title)}">
+<meta property="og:description" content="{html.escape(u["desc"][fname])}">
+<meta property="og:url" content="{BASE}{"" if lang == "en" else "ru/"}{"" if fname == "index.html" else fname}">
+<meta property="og:locale" content="{"ru_RU" if lang == "ru" else "en_US"}">
+<meta property="og:image" content="{BASE}og-{lang}.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 {alt}
 {STYLE}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -504,6 +513,8 @@ def main():
         for f in PAGES:
             with open(os.path.join(d, f), "w", encoding="utf-8") as fh:
                 fh.write(page(lang, f))
+    for lang in LANGS:  # link preview cards, drawn by src/og_card.py
+        shutil.copy(os.path.join(HERE, f"og-{lang}.png"), os.path.join(OUT, f"og-{lang}.png"))
     write_data_readme()
     open(os.path.join(OUT, ".nojekyll"), "w").close()
 
