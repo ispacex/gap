@@ -384,6 +384,15 @@
     "en": "Branch <code>correctness</code> of ispacex/anupq fast-forwarded to cdce1dc: master with all fixes #96–#121; 123 test files pass.",
     "ru": "Ветка <code>correctness</code> репозитория ispacex/anupq продвинута до cdce1dc: master со всеми исправлениями #96–#121; проходят 123 файла тестов."
    }
+  },
+  {
+   "date": "2026-10-18",
+   "time": "22:36",
+   "kind": "text",
+   "text": {
+    "en": "Branch <code>correctness</code> fast-forwarded to b7deefa: the union-find orbit computation for insoluble automorphism groups (<a href=\"https://github.com/ispacex/anupq/pull/2\">ispacex/anupq#2</a>). A speed-up, not a fix: the output is byte-for-byte the same as on cdce1dc (descendants of (Z/2)^d, (Z/3)^d, class-2 groups with insoluble Aut, 360 SmallGroups of order 64–256); peak memory of pq drops from 137 MB to 20 MB on Z/4×(Z/2)^6 and from 1.92 GB to 1.27 GB on (Z/2)^5 with step 13; 123 test files pass.",
+    "ru": "Ветка <code>correctness</code> продвинута до b7deefa: орбиты неразрешимой группы автоморфизмов через union-find (<a href=\"https://github.com/ispacex/anupq/pull/2\">ispacex/anupq#2</a>). Это ускорение, а не исправление: выдача побайтно та же, что на cdce1dc (потомки (Z/2)^d, (Z/3)^d, групп класса 2 с неразрешимой Aut, 360 SmallGroups порядков 64–256); пиковая память pq падает со 137 МБ до 20 МБ на Z/4×(Z/2)^6 и с 1,92 ГБ до 1,27 ГБ на (Z/2)^5 с шагом 13; проходят 123 файла тестов."
+   }
   }
  ],
  "pr_created": {

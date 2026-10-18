@@ -142,6 +142,7 @@ h2[id], h3[id] { scroll-margin-top:1rem; }
 <tr><th>время (UTC)</th><th class=l>событие</th></tr>
 <tr><th class=l colspan=2 id="d-2026-10-18">18.10.2026</th></tr>
 <tr id="e-site-update"><td>—</td><td class=l>Сайт: дефекты второго прохода 10–24, «Открытые вопросы» сведены к двум известным рискам и списку опровергнутого, русская версия, эта страница истории.</td></tr>
+<tr id="e-2026-10-18-2236"><td>22:36</td><td class=l>Ветка <code>correctness</code> продвинута до b7deefa: орбиты неразрешимой группы автоморфизмов через union-find (<a href="https://github.com/ispacex/anupq/pull/2">ispacex/anupq#2</a>). Это ускорение, а не исправление: выдача побайтно та же, что на cdce1dc (потомки (Z/2)^d, (Z/3)^d, групп класса 2 с неразрешимой Aut, 360 SmallGroups порядков 64–256); пиковая память pq падает со 137 МБ до 20 МБ на Z/4×(Z/2)^6 и с 1,92 ГБ до 1,27 ГБ на (Z/2)^5 с шагом 13; проходят 123 файла тестов.</td></tr>
 <tr id="e-sp128"><td>14:20</td><td class=l>Повторный прогон проверки стандартных презентаций порядка 128 завершён: все 2328 групп получают попарно различные презентации, а случайная перепрезентация каждой — ту же самую, и на master, и на correctness (0 ошибок; master — 1947 с процессорного времени).</td></tr>
 <tr id="e-2026-10-18-1210"><td>12:10</td><td class=l>Ветка <code>correctness</code> репозитория ispacex/anupq продвинута до cdce1dc: master со всеми исправлениями #96–#121; проходят 123 файла тестов.</td></tr>
 <tr id="e-pr-119"><td>11:44</td><td class=l>Открыт PR <a href="https://github.com/gap-packages/anupq/pull/119">#119</a> для дефекта <a href="findings.html#interface-bookkeeping">15</a></td></tr>
@@ -190,7 +191,7 @@ h2[id], h3[id] { scroll-margin-top:1rem; }
 </table></div>
 
 </div>
-</main><footer><div class="wrap"><small>Проверка пакета GAP ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master 81bcf35), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. Исправления: PR #96–#121; все вместе — ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a>, коммит cdce1dc. Состояние на 18 октября 2026 г..<br>Раздел <a href="https://ispacex.github.io/ru/math/">«Математика»</a> на ispacex.github.io.</small></div></footer>
+</main><footer><div class="wrap"><small>Проверка пакета GAP ANUPQ (<a href="https://github.com/gap-packages/anupq">gap-packages/anupq</a>, master 81bcf35), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. Исправления: PR #96–#121; все вместе — ветка <a href="https://github.com/ispacex/anupq/tree/correctness"><code>correctness</code></a>, коммит b7deefa. Состояние на 18 октября 2026 г..<br>Раздел <a href="https://ispacex.github.io/ru/math/">«Математика»</a> на ispacex.github.io.</small></div></footer>
 <script>(function(){var d=document.documentElement,K='gap-theme',
 b=document.querySelectorAll('.theme button');
 function show(){var t=d.getAttribute('data-theme')||'system';
