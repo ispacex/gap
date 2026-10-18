@@ -6,3 +6,10 @@ function set(t){if(t==='light'||t==='dark')d.setAttribute('data-theme',t);else{t
 for(var i=0;i<b.length;i++)b[i].addEventListener('click',function(){var t=set(this.getAttribute('data-t'));
 try{if(t==='system')localStorage.removeItem(K);else localStorage.setItem(K,t)}catch(e){}});
 addEventListener('storage',function(e){if(e.key===K)set(e.newValue)});show()})()</script>
+<script>(function(){var a=document.querySelectorAll('.toc a');if(!a.length||!('IntersectionObserver' in window))return;
+var m={},h=[],cur=null;for(var i=0;i<a.length;i++){var id=a[i].getAttribute('href').slice(1),e=document.getElementById(id);if(e){m[id]=a[i];h.push(e)}}
+function mark(id){if(cur)cur.classList.remove('on');cur=m[id]||null;if(cur){cur.classList.add('on');
+var t=cur.closest('.toc'),r=cur.getBoundingClientRect(),q=t.getBoundingClientRect();if(r.top<q.top||r.bottom>q.bottom)cur.scrollIntoView({block:'nearest'})}}
+function pick(){var best=h[0];for(var i=0;i<h.length;i++){if(h[i].getBoundingClientRect().top<=window.innerHeight*0.25)best=h[i];else break}mark(best.id)}
+var o=new IntersectionObserver(pick,{rootMargin:'0px 0px -70% 0px'});for(var i=0;i<h.length;i++)o.observe(h[i]);
+addEventListener('scroll',function(){if(window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-2)mark(h[h.length-1].id)},{passive:true});pick()})()</script>

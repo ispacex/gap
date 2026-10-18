@@ -1,3 +1,4 @@
+import re
 #!/usr/bin/env python3
 """Builds the static site ispacex.github.io/gap in English and Russian.
 
@@ -54,14 +55,15 @@ UI = {
                  "open.html": "What is still open, and what was checked and refuted.",
                  "history.html": "When each finding was added, and the state of its pull request.",
                  "data.html": "Scripts and data to repeat the checks."},
-        "sections": "Sections", "language": "Language", "theme": "Theme",
+        "sections": "Sections", "onpage": "On this page", "language": "Language", "theme": "Theme",
         "themes": {"system": "system", "light": "light", "dark": "dark"},
         "branch": "branch", "prepared": "fix prepared, pull request to come",
         "footer": 'An audit of the GAP package ANUPQ (<a href="{repo}">gap-packages/anupq</a>, master at '
                   '{master}) by the D₅ project (<a href="https://github.com/ispacex/dimension-subrings">'
                   'ispacex/dimension-subrings</a>), which relies on ANUPQ for p-group generation. Fixes: '
                   'pull requests #96–#117; all of them together: branch <a href="{fork}/tree/correctness">'
-                  '<code>correctness</code></a> at {correctness}. As of {date}.',
+                  '<code>correctness</code></a> at {correctness}. As of {date}.<br>'
+                  'Part of <a href="https://ispacex.github.io/math/">Mathematics</a> at ispacex.github.io.',
     },
     "ru": {
         "site": "ANUPQ: проверка корректности",
@@ -74,14 +76,15 @@ UI = {
                  "open.html": "Что ещё открыто, а что проверено и опровергнуто.",
                  "history.html": "Когда добавлен каждый дефект и в каком состоянии его PR.",
                  "data.html": "Скрипты и данные, чтобы повторить проверки."},
-        "sections": "Разделы", "language": "Язык", "theme": "Тема",
+        "sections": "Разделы", "onpage": "На этой странице", "language": "Язык", "theme": "Тема",
         "themes": {"system": "системная", "light": "светлая", "dark": "тёмная"},
         "branch": "ветка", "prepared": "исправление готово, PR готовится",
         "footer": 'Проверка пакета GAP ANUPQ (<a href="{repo}">gap-packages/anupq</a>, master '
                   '{master}), выполненная проектом D₅ (<a href="https://github.com/ispacex/dimension-subrings">'
                   'ispacex/dimension-subrings</a>), который опирается на ANUPQ при построении p-групп. '
                   'Исправления: PR #96–#117; все вместе — ветка <a href="{fork}/tree/correctness">'
-                  '<code>correctness</code></a>, коммит {correctness}. Состояние на {date}.',
+                  '<code>correctness</code></a>, коммит {correctness}. Состояние на {date}.<br>'
+                  'Раздел <a href="https://ispacex.github.io/ru/math/">«Математика»</a> на ispacex.github.io.',
     },
 }
 
@@ -426,6 +429,17 @@ def lang_switch(lang, fname):
             f'<strong lang="ru" aria-current="true">RU</strong></span>')
 
 
+def toc(body, label):
+    """the page's own headings with an id, as a side panel; None if too few"""
+    heads = re.findall(r'<h([23]) id="([^"]+)"[^>]*>(.*?)</h\1>', body, re.S)
+    if len(heads) < 4:
+        return None
+    items = "".join(
+        f'<li class="l{lvl}"><a href="#{hid}">{re.sub(r"<[^>]+>", "", text).strip()}</a></li>'
+        for lvl, hid, text in heads)
+    return f'<aside class="toc" aria-label="{html.escape(label)}"><p>{html.escape(label)}</p><ol>{items}</ol></aside>'
+
+
 def page(lang, fname):
     u = UI[lang]
     depth = 0 if lang == "en" else 1
@@ -441,6 +455,10 @@ def page(lang, fname):
            f'<link rel="alternate" hreflang="ru" href="{BASE}ru/{fname}">\n'
            f'<link rel="alternate" hreflang="x-default" href="{BASE}{fname}">\n'
            f'<link rel="canonical" href="{BASE}{"" if lang == "en" else "ru/"}{fname}">')
+    side = toc(body, u["onpage"])
+    main_cls = "wrap has-toc" if side else "wrap"
+    side = side or ""
+    body_cls = ' class="has-toc"' if main_cls != "wrap" else ""
     footer = u["footer"].format(repo=REPO, fork=FORK, master=N["master"], correctness=N["correctness"], date=v["date"])
     return f"""<!doctype html>
 <html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -453,11 +471,13 @@ def page(lang, fname):
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
  onload="renderMathInElement(document.body,{{delimiters:[{{left:'$$',right:'$$',display:true}},{{left:'$',right:'$',display:false}}]}})"></script></head>
-<body><header><div class="wrap"><div class="top"><a class="title" href="index.html">{u["site"]}</a>
+<body{body_cls}><header><div class="wrap"><div class="top"><a class="title" href="index.html">{u["site"]}</a>
 <div class="tools">{theme_buttons(lang)}{lang_switch(lang, fname)}</div></div>
 <nav aria-label="{u["sections"]}">{nav}</nav></div></header>
-<main class="wrap">
+<main class="{main_cls}">
+<div class="content">
 {body}
+</div>{side}
 </main><footer><div class="wrap"><small>{footer}</small></div></footer>
 {THEME_JS}
 </body></html>

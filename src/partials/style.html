@@ -56,4 +56,21 @@ td.amb { background:var(--amb); } td.ok { background:var(--ok); }
 img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:6px; background:#fff; padding:var(--imgpad); }
 code { background:var(--soft); padding:0 .25em; border-radius:3px; }
 footer { border-top:1px solid var(--line); margin-top:3rem; }
+.toc { display:none; }
+@media (min-width:1180px) {
+  body.has-toc .wrap { max-width:1420px; }
+  main.has-toc { display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:2.2rem; align-items:start; }
+  .toc { display:block; position:sticky; top:1rem; max-height:calc(100vh - 2rem); overflow-y:auto; margin-top:1.2rem;
+         font-size:.86rem; line-height:1.35; border-left:1px solid var(--line); padding:.2rem 0 .2rem .9rem; }
+  .toc p { margin:0 0 .5rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.04em; font-size:.75rem; }
+  .toc ol { list-style:none; margin:0; padding:0; }
+  .toc li { margin:.18rem 0; }
+  .toc li.l2 { margin-top:.65rem; font-weight:600; }
+  .toc li.l3 { padding-left:.7rem; }
+  .toc a { color:var(--muted); text-decoration:none; display:block; border-left:2px solid transparent; margin-left:calc(-.9rem - 1px); padding-left:calc(.9rem - 1px); }
+  .toc li.l3 a { margin-left:calc(-1.6rem - 1px); padding-left:calc(1.6rem - 1px); }
+  .toc a:hover { color:var(--acc); }
+  .toc a.on { color:var(--acc); border-left-color:var(--acc); }
+}
+h2[id], h3[id] { scroll-margin-top:1rem; }
 </style><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
