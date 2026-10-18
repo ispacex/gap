@@ -321,12 +321,12 @@
   },
   {
    "date": "2026-10-18",
-   "time": "07:51",
+   "time": "14:20",
    "kind": "text",
    "id": "sp128",
    "text": {
-    "en": "Rerun of the order-128 standard presentation check started (the first run was killed from outside); result pending.",
-    "ru": "Начат повторный прогон проверки стандартных презентаций порядка 128 (первый прогон был убит извне); результат ожидается."
+    "en": "Order-128 standard presentation check rerun finished: all 2328 groups get pairwise different presentations, and a random re-presentation of each gets the same one, on both master and correctness (0 failures; master 1947 s user time).",
+    "ru": "Повторный прогон проверки стандартных презентаций порядка 128 завершён: все 2328 групп получают попарно различные презентации, а случайная перепрезентация каждой — ту же самую, и на master, и на correctness (0 ошибок; master — 1947 с процессорного времени)."
    }
   },
   {

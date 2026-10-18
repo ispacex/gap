@@ -117,7 +117,7 @@ group that is not a $p$-group, a <code>pQuotient</code> of class 2 or more in an
 </ul>
 Against the SmallGroups library, <code>PqDescendants</code> on the library's own groups is right everywhere we
 looked (3296 pairs (group, step size), $p = 2, 3, 5, 7, 11$), and standard presentations are invariant
-and separating on 927 groups.</div>
+and separating on 3255 groups.</div>
 
 <h2>Findings</h2>
 <div class="tw"><table>
@@ -183,9 +183,9 @@ with all of them together.</li>
 $p^{m+s}$ in range, the descendants are exactly the groups $H$ of order $p^{m+s}$ with $H/P_c(H) \cong G$
 (as multisets of <code>IdGroup</code>): $p = 2$ to order $2^8$, $p = 3$ to $3^6$, $p = 5$ to $5^5$,
 $p = 7, 11$ to $p^4$; 3296 pairs, 0 differences.</li>
-<li><code>PqStandardPresentation</code> as an isomorphism key: all groups of orders 2, 3, 4, 8, 16, 32, 64, 243, 625, 729 get pairwise
+<li><code>PqStandardPresentation</code> as an isomorphism key: all groups of orders 2, 3, 4, 8, 16, 32, 64, 128, 243, 625, 729 get pairwise
 different standard presentations, each is a presentation of its group, and isomorphic copies in other pc
-presentations get the same one (927 groups, 0 failures; order 128 is being rerun).</li>
+presentations get the same one (3255 groups, 0 failures).</li>
 <li>The collectors for $p = 2$ and odd $p$, consistency and tails, echelonisation, label/subgroup conversion,
 the allowability test $U + N = M$, the central automorphisms, the insoluble orbit algorithm, and the
 permutation representation of $A/S$ handed to AutPGrp (PR #85): read and found right.</li>
