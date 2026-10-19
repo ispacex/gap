@@ -38,7 +38,7 @@ STYLE, THEME_HEAD, THEME_JS = partial("style.html"), partial("theme_head.html"),
 BASE = "https://ispacex.github.io/gap/"
 REPO = "https://github.com/gap-packages/anupq"
 FORK = "https://github.com/ispacex/anupq"
-PAGES = ["index.html", "findings.html", "checks.html", "open.html", "history.html", "data.html"]
+PAGES = ["index.html", "findings.html", "checks.html", "open.html", "history.html", "data.html", "search.html"]
 LANGS = ["en", "ru"]
 MONTHS_RU = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября",
              "октября", "ноября", "декабря"]
@@ -48,13 +48,14 @@ UI = {
         "site": "ANUPQ: a correctness audit",
         "titles": {"index.html": "Summary", "findings.html": "Findings and fixes",
                    "checks.html": "Differential checks", "open.html": "Open items",
-                   "history.html": "History", "data.html": "Data and scripts"},
+                   "history.html": "History", "data.html": "Data and scripts", "search.html": "Search"},
         "desc": {"index.html": "What we checked in ANUPQ, what we found, and the fixes we propose.",
                  "findings.html": "Each defect: reproducer, cause, fix, why it is right, evidence.",
                  "checks.html": "Descendants against SmallGroups, other presentations, standard presentations.",
                  "open.html": "What is still open, and what was checked and refuted.",
                  "history.html": "When each finding was added, and the state of its pull request.",
-                 "data.html": "Scripts and data to repeat the checks."},
+                 "data.html": "Scripts and data to repeat the checks.",
+                 "search.html": "Search the text of the audit: defects, checks, formulas, commands."},
         "sections": "Sections", "onpage": "On this page", "language": "Language", "theme": "Theme",
         "themes": {"system": "system", "light": "light", "dark": "dark"},
         "branch": "branch", "prepared": "fix prepared, pull request to come",
@@ -69,13 +70,14 @@ UI = {
         "site": "ANUPQ: проверка корректности",
         "titles": {"index.html": "Сводка", "findings.html": "Дефекты и исправления",
                    "checks.html": "Сверки", "open.html": "Открытые вопросы",
-                   "history.html": "История", "data.html": "Данные и скрипты"},
+                   "history.html": "История", "data.html": "Данные и скрипты", "search.html": "Поиск"},
         "desc": {"index.html": "Что мы проверили в ANUPQ, что нашли и какие исправления предлагаем.",
                  "findings.html": "Каждый дефект: воспроизведение, причина, исправление, обоснование, проверка.",
                  "checks.html": "Потомки против библиотеки SmallGroups, другие презентации, стандартные презентации.",
                  "open.html": "Что ещё открыто, а что проверено и опровергнуто.",
                  "history.html": "Когда добавлен каждый дефект и в каком состоянии его PR.",
-                 "data.html": "Скрипты и данные, чтобы повторить проверки."},
+                 "data.html": "Скрипты и данные, чтобы повторить проверки.",
+                 "search.html": "Поиск по тексту проверки: дефекты, сверки, формулы, команды."},
         "sections": "Разделы", "onpage": "На этой странице", "language": "Язык", "theme": "Тема",
         "themes": {"system": "системная", "light": "светлая", "dark": "тёмная"},
         "branch": "ветка", "prepared": "исправление готово, PR готовится",
@@ -451,6 +453,100 @@ def toc(body, label):
     return f'<aside class="toc" aria-label="{html.escape(label)}"><p>{html.escape(label)}</p><ol>{items}</ol></aside>'
 
 
+# ---------- search ----------
+# The engine is the main site's (/sitesearch/ on ispacex.github.io, the same origin), as on the sites
+# of d5 and the metalibrary: a flat index of every page in both languages, each page naming its
+# `lang`, so that the search and the palette answer in the language they are opened in; and the
+# page names alone for ⌘K. The site is small enough for one file (FORMAT.md of sitesearch): no two
+# tiers. Formulas stay the TeX they are between their $, which the engine folds (\\le, ≤) and draws.
+SECTION = {"en": "ANUPQ audit", "ru": "Проверка ANUPQ"}
+PLACEHOLDER = {"en": "Where to? for example: Finding 15, StepSize, 2^8", "ru": "Куда идём? например: дефект 15, StepSize, 2^8"}
+
+
+def palette(lang):
+    search = "search.html" if lang == "en" else "ru/search.html"
+    return (f'<script src="/sitesearch/palette.js" data-index="/gap/nav-index.json" data-mount="header .pal" '
+            f'data-search="/gap/{search}" data-search-index="/gap/search-index.json" '
+            f'data-placeholder="{PLACEHOLDER[lang]}" defer></script>')
+
+
+def blocks_of(body):
+    """The pieces of text of a page: paragraphs, list items, table rows and code, each with the heading
+    above it and that heading's anchor, so that a result lands on its section."""
+    from html.parser import HTMLParser
+    out = []
+
+    class P(HTMLParser):
+        BLOCK = {"p", "li", "tr", "pre", "h1", "h2", "h3", "dt", "dd"}
+
+        def __init__(self):
+            super().__init__()
+            self.buf, self.section, self.anchor, self.skip = [], "", None, 0
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if tag in ("svg", "script", "style", "aside"):
+                self.skip += 1
+            elif tag in self.BLOCK:
+                self.flush()
+                if tag in ("h2", "h3") and a.get("id"):
+                    self.anchor = a["id"]
+            elif tag in ("td", "th") and self.buf:
+                self.buf.append(" · ")
+            elif a.get("id") and tag in ("tr", "div", "section"):
+                self.anchor = a["id"]
+
+        def handle_endtag(self, tag):
+            if tag in ("svg", "script", "style", "aside"):
+                self.skip -= 1
+            elif tag in self.BLOCK:
+                text = self.flush()
+                if tag in ("h1", "h2", "h3"):
+                    self.section = text if tag != "h1" else ""
+                elif len(text) > 1:
+                    b = {"text": text}
+                    if self.section:
+                        b["section"] = self.section
+                    if self.anchor:
+                        b["anchor"] = self.anchor
+                    out.append(b if len(b) > 1 else text)
+
+        def handle_data(self, data):
+            if not self.skip:
+                self.buf.append(data)
+
+        def flush(self):
+            text = re.sub(r"\s+", " ", "".join(self.buf)).strip(" ·")
+            self.buf = []
+            return text
+
+    p = P()
+    p.feed(body)
+    p.flush()
+    return out
+
+
+def write_search(bodies):
+    pages = []
+    for lang in LANGS:
+        for i, f in enumerate(PAGES):
+            if f == "search.html":
+                continue
+            u = UI[lang]
+            pages.append({"url": "/gap/" + ("" if lang == "en" else "ru/") + ("" if f == "index.html" else f),
+                          "title": u["titles"][f], "lang": lang, "section": SECTION[lang], "order": i,
+                          "blocks": blocks_of(bodies[lang, f])})
+    with open(os.path.join(OUT, "search-index.json"), "w", encoding="utf-8") as fh:
+        json.dump({"pages": pages}, fh, ensure_ascii=False, separators=(",", ":"))
+    with open(os.path.join(OUT, "nav-index.json"), "w", encoding="utf-8") as fh:
+        json.dump({"pages": [{k: v for k, v in p.items() if k != "blocks"} for p in pages]}, fh,
+                  ensure_ascii=False, separators=(",", ":"))
+    return sum(len(p["blocks"]) for p in pages)
+
+
+BODIES = {}
+
+
 def page(lang, fname):
     u = UI[lang]
     depth = 0 if lang == "en" else 1
@@ -458,6 +554,7 @@ def page(lang, fname):
     body = fill(open(os.path.join(HERE, "pages", lang, fname), encoding="utf-8").read(), v)
     if fname == "findings.html":
         body = mark_findings(body, lang)
+    BODIES[lang, fname] = body
     title = u["site"] if fname == "index.html" else u["titles"][fname] + " — " + u["site"]
     nav = "".join(
         f'<a href="{f}" class=cur aria-current=page>{u["titles"][f]}</a>' if f == fname else f'<a href="{f}">{u["titles"][f]}</a>'
@@ -492,7 +589,7 @@ def page(lang, fname):
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
  onload="renderMathInElement(document.body,{{delimiters:[{{left:'$$',right:'$$',display:true}},{{left:'$',right:'$',display:false}}]}})"></script></head>
 <body{body_cls}><header><div class="wrap"><div class="top"><a class="title" href="index.html">{u["site"]}</a>
-<div class="tools">{theme_buttons(lang)}{lang_switch(lang, fname)}</div></div>
+<div class="tools"><span class="pal"></span>{theme_buttons(lang)}{lang_switch(lang, fname)}</div></div>
 <nav aria-label="{u["sections"]}">{nav}</nav></div></header>
 <main class="{main_cls}">
 <div class="content">
@@ -500,6 +597,7 @@ def page(lang, fname):
 </div>{side}
 </main><footer><div class="wrap"><small>{footer}</small></div></footer>
 {THEME_JS}
+{palette(lang)}
 </body></html>
 """
 
@@ -516,6 +614,7 @@ def main():
     for lang in LANGS:  # link preview cards, drawn by src/og_card.py
         shutil.copy(os.path.join(HERE, f"og-{lang}.png"), os.path.join(OUT, f"og-{lang}.png"))
     write_data_readme()
+    print("search index:", write_search(BODIES), "blocks")
     open(os.path.join(OUT, ".nojekyll"), "w").close()
 
 

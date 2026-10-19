@@ -1,0 +1,13 @@
+<h1>Поиск</h1>
+<p><input type="search" id="q" placeholder="например: дефект 15, StepSize, 2^8, \le" autocomplete="off" spellcheck="false"
+ style="padding:.45em .6em;width:100%;max-width:32em;font-size:1em"></p>
+<p id="status"></p>
+<ul id="results" style="list-style:none;padding:0"></ul>
+<p><small>Ищет по тексту всех страниц, включая строки таблиц и код. Несколько слов — найдутся места, где есть все они.
+Формула находится как её ни напиши: <code>2^8</code>, <code>p^{m+s}</code>, <code>≤</code>; символ — наберите <code>\</code> и имя (<code>\le</code>) или выберите в Σ.
+Эта страница ищет по русским страницам; <a href="../search.html" hreflang="en">английский поиск</a> — по английским.
+Поиск — движок сайта <a href="https://ispacex.github.io/search/">ispacex.github.io</a>; ⌘K / Ctrl-K на любой странице открывает переход по разделам.</small></p>
+<style>#results li{margin:0 0 1.1em} #results .where{font-size:.85em;color:var(--muted)} #results mark{background:rgba(255,200,80,.35);color:inherit}</style>
+<script src="/sitesearch/search.js"></script>
+<script src="/sitesearch/symbols.js"></script>
+<script>SiteSearch.mount({input: 'q', status: 'status', results: 'results', sources: [{ url: '/gap/search-index.json' }]});</script>
