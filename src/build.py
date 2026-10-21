@@ -116,6 +116,16 @@ def prs(key):
     return n if isinstance(n, list) else [n] if n else []
 
 
+def fix_state(key):
+    """the upstream state of a fix, from history.json: "merged" when all its PRs are, "closed" when one
+    is, else "open"; None without a PR"""
+    ns = prs(key)
+    if not ns:
+        return None
+    sts = [H["pr_states"].get(str(n), "open") for n in ns]
+    return "closed" if "closed" in sts else "merged" if all(x == "merged" for x in sts) else "open"
+
+
 def pr(key, lang):
     ns = prs(key)
     if ns:
@@ -243,8 +253,7 @@ def history_findings(lang):
         eid, d = a[r["anchor"]]
         ns = prs(r["fix"])
         if ns:
-            sts = [H["pr_states"].get(str(n), "open") for n in ns]
-            st = "closed" if "closed" in sts else "merged" if all(x == "merged" for x in sts) else "open"
+            st = fix_state(r["fix"])
             fix = ", ".join(prlink(n) for n in ns)
             opened, state = dmy(min(H["pr_created"][str(n)] for n in ns)), T["states"].get(st, st)
             cls = {"merged": "ok", "closed": "bad"}.get(st, "")
@@ -350,18 +359,26 @@ def refresh_pr_states():
 # ---------------------------------------------------------------------------------------------
 # Shared tables
 
+def state_cell(key, lang):
+    st = fix_state(key)
+    if st is None:
+        return '<td class="amb">—</td>'
+    return f'<td class="{ {"merged": "ok", "closed": "bad"}.get(st, "") }">{HT[lang]["states"][st]}</td>'
+
+
 def findings_table(lang):
     rows = []
     for r in facts.FINDINGS:
         if "group" in r:
-            rows.append(f'<tr><th class=l colspan=4>{r["group"][lang]}</th></tr>')
+            rows.append(f'<tr><th class=l colspan=5>{r["group"][lang]}</th></tr>')
             continue
         rows.append(
             f'<tr><td class=l><a href="findings.html#{r["anchor"]}">{r["defect"][lang]}</a></td>'
             f'<td class="l {r["cls"]}">{r["effect"][lang]}</td><td class=l>{r["reached"][lang]}</td>'
-            f'<td>{pr(r["fix"], lang)}</td></tr>')
-    h = {"en": ("Defect", "Effect", "Reached by", "Fix"), "ru": ("Дефект", "Последствие", "Когда проявляется", "Исправление")}[lang]
-    head = "<tr>" + "".join(f"<th class=l>{t}</th>" for t in h[:3]) + f"<th>{h[3]}</th></tr>"
+            f'<td>{pr(r["fix"], lang)}</td>{state_cell(r["fix"], lang)}</tr>')
+    h = {"en": ("Defect", "Effect", "Reached by", "Fix", "Upstream"),
+         "ru": ("Дефект", "Последствие", "Когда проявляется", "Исправление", "В апстриме")}[lang]
+    head = "<tr>" + "".join(f"<th class=l>{t}</th>" for t in h[:3]) + "".join(f"<th>{t}</th>" for t in h[3:]) + "</tr>"
     return '<div class="tw"><table>\n' + head + "\n" + "\n".join(rows) + "\n</table></div>"
 
 
