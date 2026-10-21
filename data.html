@@ -164,5 +164,5 @@ function pick(){var best=h[0];for(var i=0;i<h.length;i++){if(h[i].getBoundingCli
 var o=new IntersectionObserver(pick,{rootMargin:'0px 0px -70% 0px'});for(var i=0;i<h.length;i++)o.observe(h[i]);
 addEventListener('scroll',function(){if(window.scrollY+window.innerHeight>=document.documentElement.scrollHeight-2)mark(h[h.length-1].id)},{passive:true});pick()})()</script>
 
-<script src="/sitesearch/palette.js" data-index="/gap/nav-index.json" data-mount="header .pal" data-search="/gap/search.html" data-search-index="/gap/search-index.json" data-placeholder="Where to? for example: Finding 15, StepSize, 2^8" defer></script>
+<script src="/sitesearch/palette.js" data-index="/gap/nav-index.json" data-mount="header .pal" data-search="/gap/search.html" data-search-index="/gap/search-index.json" data-placeholder="Where to? for example: Finding 15, StepSize, 2^8" data-symbols="true" defer></script>
 </body></html>

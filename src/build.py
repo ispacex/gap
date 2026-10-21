@@ -484,7 +484,7 @@ def palette(lang):
     search = "search.html" if lang == "en" else "ru/search.html"
     return (f'<script src="/sitesearch/palette.js" data-index="/gap/nav-index.json" data-mount="header .pal" '
             f'data-search="/gap/{search}" data-search-index="/gap/search-index.json" '
-            f'data-placeholder="{PLACEHOLDER[lang]}" defer></script>')
+            f'data-placeholder="{PLACEHOLDER[lang]}" data-symbols="true" defer></script>')
 
 
 def blocks_of(body):
