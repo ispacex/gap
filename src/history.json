@@ -427,7 +427,7 @@
   "122": "2026-10-19"
  },
  "pr_states": {
-  "96": "open",
+  "96": "merged",
   "97": "merged",
   "98": "merged",
   "99": "merged",
@@ -440,22 +440,22 @@
   "106": "merged",
   "107": "merged",
   "108": "merged",
-  "109": "open",
-  "110": "open",
-  "111": "open",
-  "112": "open",
+  "109": "merged",
+  "110": "merged",
+  "111": "merged",
+  "112": "merged",
   "113": "merged",
   "114": "merged",
-  "115": "open",
-  "116": "open",
-  "117": "open",
-  "121": "open",
-  "120": "open",
-  "119": "open",
-  "118": "open",
+  "115": "merged",
+  "116": "merged",
+  "117": "merged",
+  "121": "merged",
+  "120": "merged",
+  "119": "merged",
+  "118": "merged",
   "124": "open",
   "123": "merged",
   "122": "merged"
  },
- "pr_states_as_of": "2026-10-21"
+ "pr_states_as_of": "2026-11-07"
 }
